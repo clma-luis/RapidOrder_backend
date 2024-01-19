@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+
+# TypeScript
+*.tsbuildinfo
+*.js
+*.map
+
+# Visual Studio Code
+.vscode/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Dependency directories
+# https://docs.npmjs.com/cli/v7/configuring-npm/folders#node-modules
+node_modules
+# https://github.com/yarnpkg/yarn/issues/2688
+yarn-error.log
+
+# Editor directories and files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
