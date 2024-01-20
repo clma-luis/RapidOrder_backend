@@ -1,9 +1,13 @@
 import express from "express";
 import cors from "cors";
 
+import { dbConnection } from "./database/config";
 import { BASE_URL_PORT } from "./shared/constants/config";
 
 import orderRoutes from "./modules/order/orderRoutes";
+import menuRoutes from "./modules/menu/menuRoutes";
+
+import seedRoutes from "./modules/seeds/seedRoutes";
 
 export class Server {
   private app: express.Application;
@@ -12,8 +16,13 @@ export class Server {
   constructor() {
     this.app = express();
     this.port = BASE_URL_PORT as string;
+    this.connectDataBase();
     this.middlewares();
     this.routes();
+  }
+
+  async connectDataBase() {
+    await dbConnection();
   }
 
   public middlewares() {
@@ -23,6 +32,8 @@ export class Server {
 
   private routes() {
     this.app.use("/api/order", orderRoutes);
+    this.app.use("/api/menu", menuRoutes);
+    this.app.use("/api/seed", seedRoutes);
 
     this.app.get("/", (req, res) => {
       res.json({ text: "Get, TypeScript with Express in the Server class!", status: 200 });
