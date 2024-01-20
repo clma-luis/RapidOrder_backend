@@ -1,5 +1,9 @@
 import express from "express";
+import cors from "cors";
+
 import { BASE_URL_PORT } from "./shared/constants/config";
+
+import orderRoutes from "./modules/order/orderRoutes";
 
 export class Server {
   private app: express.Application;
@@ -8,16 +12,18 @@ export class Server {
   constructor() {
     this.app = express();
     this.port = BASE_URL_PORT as string;
-
     this.middlewares();
     this.routes();
   }
 
   public middlewares() {
-    this.app.use(express.static("public"));
+    this.app.use(cors());
+    this.app.use(express.json());
   }
 
   private routes() {
+    this.app.use("/api/order", orderRoutes);
+
     this.app.get("/", (req, res) => {
       res.json({ text: "Get, TypeScript with Express in the Server class!", status: 200 });
     });
