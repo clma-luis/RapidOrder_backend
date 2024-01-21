@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { MenuService } from "../menu/menuService";
 import { menuSeedData } from "./seedData/menuSeedData";
+import { MenuItemSchema } from "../menu/menuModel";
 
 const menuService = new MenuService();
 
@@ -11,7 +12,7 @@ export class SeedController {
     try {
       await Promise.all(
         menuSeedData.map(async (menuItem) => {
-          await menuService.addMenuItem(menuItem);
+          await menuService.addMenuItem(menuItem as MenuItemSchema);
         })
       );
 

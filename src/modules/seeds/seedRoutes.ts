@@ -6,6 +6,6 @@ const router = Router();
 const seedController = new SeedController();
 const { executeMenuSeed } = seedController;
 
-router.get("/createMenu", executeMenuSeed);
+router.get("/executeMenu", executeMenuSeed);
 
 export default router;

@@ -1,26 +1,18 @@
 import { Router } from "express";
-import { MenuService } from "./menuService";
+import { validateFields, validateId, validateMenuItemBody } from "../../middlewares/validateFieldsMenu";
 import { MenuController } from "./menuController";
-import { body, check } from "express-validator";
+import { MenuService } from "./menuService";
 
 const router = Router();
 
 const menuService = new MenuService();
 const menuController = new MenuController(menuService);
-const { addMenuItem, removeMenuItem, getAllMenuItems } = menuController;
+const { createMenuItem, getAllMenuItems, getOneMenuItem, updateMenuItem, removeMenuItem } = menuController;
 
-const validateMenuItem = [
-  body("name").notEmpty().isString(),
-  body("image").notEmpty().isString(),
-  body("description").notEmpty().isString(),
-  body("price").notEmpty().isNumeric(),
-  body("ingredients").isArray().notEmpty(),
-  body("available").optional().isIn([0, 1]),
-  body("deleted").optional().isIn([0, 1]),
-];
-
-router.post("/create", /* validateMenuItem, */ addMenuItem);
-router.post("/remove", removeMenuItem);
-router.get("/getAll", getAllMenuItems);
+router.post("/createItem", validateMenuItemBody, validateFields, createMenuItem);
+router.get("/getAllItems", getAllMenuItems);
+router.get("/getOneItem/:id", validateId, getOneMenuItem);
+router.put("/updateItem/:id", validateId, validateMenuItemBody, validateFields, updateMenuItem);
+router.put("/removeItem/:id", validateId, removeMenuItem);
 
 export default router;

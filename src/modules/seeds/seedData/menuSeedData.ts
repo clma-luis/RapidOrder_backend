@@ -1,6 +1,4 @@
-import { MenuItem } from "../../menu/menuModel";
-
-export const menuSeedData: MenuItem[] = [
+export const menuSeedData = [
   {
     name: "Ceviche",
     image: "ceviche.jpg",
