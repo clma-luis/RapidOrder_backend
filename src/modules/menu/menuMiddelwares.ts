@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import mongoose from "mongoose";
-import MenuModel from "../modules/menu/menuModel";
+import MenuModel from "./menuModel";
 
 export const validateMenuItemBody = [
   body("name", "Field name is required and string").not().isEmpty().isString(),
@@ -13,17 +13,7 @@ export const validateMenuItemBody = [
   body("deleted", "Field deleted should be 0 or 1 number").optional().isIn([0, 1]),
 ];
 
-export const validateFields = (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.mapped() });
-  }
-
-  next();
-};
-
-export const validateId = async (req: Request, res: Response, next: NextFunction) => {
+export const validateDishId = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const isValidId = mongoose.isValidObjectId(id);
   if (!isValidId) {

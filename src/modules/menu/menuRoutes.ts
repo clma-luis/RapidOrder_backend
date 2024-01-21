@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { validateFields, validateId, validateMenuItemBody } from "../../middlewares/validateFieldsMenu";
+import { validateDishId, validateMenuItemBody } from "./menuMiddelwares";
 import { MenuController } from "./menuController";
 import { MenuService } from "./menuService";
+import { validateFields } from "../../shared/middlewares/general";
 
 const router = Router();
 
@@ -11,8 +12,8 @@ const { createMenuItem, getAllMenuItems, getOneMenuItem, updateMenuItem, removeM
 
 router.post("/createItem", validateMenuItemBody, validateFields, createMenuItem);
 router.get("/getAllItems", getAllMenuItems);
-router.get("/getOneItem/:id", validateId, getOneMenuItem);
-router.put("/updateItem/:id", validateId, validateMenuItemBody, validateFields, updateMenuItem);
-router.put("/removeItem/:id", validateId, removeMenuItem);
+router.get("/getOneItem/:id", validateDishId, getOneMenuItem);
+router.put("/updateItem/:id", validateDishId, validateMenuItemBody, validateFields, updateMenuItem);
+router.put("/removeItem/:id", validateDishId, removeMenuItem);
 
 export default router;
