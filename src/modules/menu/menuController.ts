@@ -15,27 +15,27 @@ export class MenuController {
   };
 
   public getAllMenuItems = async (req: Request, res: Response) => {
-    const menuItems = await this.menuService.getAllMenuItems();
-    res.json(menuItems);
+    const result = await this.menuService.getAllMenuItems();
+    res.status(200).json({ message: "MenuItems founds", result });
   };
 
   public getOneMenuItem = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const menuItems = await this.menuService.getOneMenuItem(id);
-    res.json(menuItems);
+    const result = await this.menuService.getOneMenuItem(id);
+    res.status(200).json({ message: "MenuItem found", result });
   };
 
   public updateMenuItem = async (req: Request, res: Response) => {
     const { id } = req.params;
     const data = req.body as MenuItemSchema;
-    const menuItems = await this.menuService.updateMenuItem(id, data);
-    res.json(menuItems);
+    const result = await this.menuService.updateMenuItem(id, data);
+    res.status(200).json({ message: "Menu updated successfully", result });
   };
 
   public removeMenuItem = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const menuItems = await this.menuService.removeMenuItem(id);
-    res.json(menuItems);
+    const result = await this.menuService.removeMenuItem(id);
+    res.status(200).json({ message: result });
   };
 }
