@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import { body } from "express-validator";
 
 import UserModel from "./userModel";
-import { checkLength, checkPattern } from "../../shared/utils";
 import { LETTER_PATTERN, NUMBER_PATTERN, SPECIAL_CHARACTERS_PATTERN } from "../../shared/constants/regex";
 
 export const validateUserBody = [
@@ -61,5 +60,21 @@ export const hashPassword = async (req: Request, res: Response, next: NextFuncti
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error: password not hashed" });
+  }
+};
+
+//=================================
+//======Functions to password======
+//=================================
+
+const checkLength = (value: string, min: number, max: number, errorMessage: string, errors: string[]) => {
+  if (value.length < min || value.length > max) {
+    errors.push(errorMessage);
+  }
+};
+
+const checkPattern = (value: string, pattern: RegExp, errorMessage: string, errors: string[]) => {
+  if (!pattern.test(value)) {
+    errors.push(errorMessage);
   }
 };
