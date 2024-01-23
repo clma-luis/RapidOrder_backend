@@ -9,37 +9,21 @@ export interface UserSchema extends Document {
   deleted?: 0 | 1;
 }
 
-const userSchema = new Schema<UserSchema>(
-  {
-    name: { type: String, required: [true, "Name is required"] },
-    email: { type: String, required: [true, "Email is required"] },
-    image: { type: String, default: "" },
-    password: { type: String, required: [true, "Password is required"] },
-    role: { type: String, required: [true, "Role is required"], enum: ["ADMIN_ROLE", "USER_ROLE"] },
-    deleted: { type: Number, default: 0 },
-  },
-  {
-    versionKey: false,
-    toObject: {
-      virtuals: true,
-      transform: function (doc, ret) {
-        ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
-    toJSON: {
-      virtuals: true,
-      transform: function (doc, ret) {
-        ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
-        delete ret.password;
-      },
-    },
-  }
-);
+const UserSchema = new Schema<UserSchema>({
+  name: { type: String, required: [true, "Name is required"] },
+  email: { type: String, required: [true, "Email is required"] },
+  image: { type: String, default: "" },
+  password: { type: String, required: [true, "Password is required"] },
+  role: { type: String, required: [true, "Role is required"] },
+  deleted: { type: Number, default: 0 },
+});
 
-const UserModel = mongoose.model<UserSchema>("userModel", userSchema);
+UserSchema.methods.toJSON = function () {
+  const { __v, _id, password, deleted, ...role } = this.toObject();
+  role.id = _id.toString();
+  return role;
+};
+
+const UserModel = mongoose.model<UserSchema>("User", UserSchema);
 
 export default UserModel;

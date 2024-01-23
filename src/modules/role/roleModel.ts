@@ -4,23 +4,16 @@ export interface RoleSchema extends Document {
   role: string;
 }
 
-const menuSchema = new Schema<RoleSchema>(
-  {
-    role: { type: String, required: [true, "Role is required"] },
-  },
-  {
-    versionKey: false,
-    toJSON: {
-      virtuals: true,
-      transform: function (doc, ret) {
-        ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
-  }
-);
+const RoleSchema = new Schema<RoleSchema>({
+  role: { type: String, required: [true, "Role is required"] },
+});
 
-const RoleModel = mongoose.model<RoleSchema>("MenuItem", menuSchema);
+RoleSchema.methods.toJSON = function () {
+  const { __v, _id, ...role } = this.toObject();
+  role.id = _id.toString();
+  return role;
+};
+
+const RoleModel = mongoose.model<RoleSchema>("role", RoleSchema);
 
 export default RoleModel;

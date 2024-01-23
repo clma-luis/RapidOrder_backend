@@ -24,6 +24,16 @@ export class UserService {
     return result;
   }
 
+  async changeUserPassword(id: string, password: string): Promise<UserSchema> {
+    const result = (await UserModel.findOneAndUpdate({ _id: id }, { password }, { new: true }).exec()) as UserSchema;
+    return result;
+  }
+
+  async changeUserEmail(id: string, email: string): Promise<UserSchema> {
+    const result = (await UserModel.findOneAndUpdate({ _id: id }, { email }, { new: true }).exec()) as UserSchema;
+    return result;
+  }
+
   async removeUser(id: string): Promise<string> {
     (await UserModel.findOneAndUpdate({ _id: id }, { deleted: 1 }, { new: true }).exec()) as UserSchema;
     return "User deleted successfully";

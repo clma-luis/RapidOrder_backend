@@ -21,9 +21,26 @@ export class UserController {
   }
 
   async updateUser(req: Request, res: Response) {
+    const { _id, __v, email, password, deleted, ...rest } = req.body;
     const { id } = req.params;
-    const result = await userService.updateUser(id, req.body);
+    const result = await userService.updateUser(id, rest);
     res.status(200).json({ message: "updated successfully", result });
+  }
+
+  async changeUserPassword(req: Request, res: Response) {
+    const { id } = req.params;
+    const { newPassword } = req.body;
+
+    const result = await userService.changeUserPassword(id, newPassword);
+    res.status(200).json({ message: "password updated successfully", result });
+  }
+
+  async changeUserEmail(req: Request, res: Response) {
+    const { id } = req.params;
+    const { newEmail } = req.body;
+
+    const result = await userService.changeUserEmail(id, newEmail);
+    res.status(200).json({ message: "email updated successfully", result });
   }
 
   async removeUser(req: Request, res: Response) {
