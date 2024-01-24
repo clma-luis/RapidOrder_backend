@@ -1,16 +1,24 @@
 import UserModel, { UserSchema } from "./userModel";
 
 export class UserService {
-  constructor() {}
+  private userNotDeleted: number;
+  constructor() {
+    this.userNotDeleted = 0;
+  }
 
-  async creatreUser(data: any): Promise<UserSchema> {
+  async createUser(data: any): Promise<UserSchema> {
     const menuItem = new UserModel({ ...data });
     const result = await menuItem.save();
     return result;
   }
 
-  async getAllUsers(): Promise<UserSchema[]> {
-    return UserModel.find().exec();
+  async getAllUsers({ page, size }: { page: number; size: number }): Promise<UserSchema[]> {
+    const skip = (page - 1) * size;
+    return UserModel.find({ deleted: this.userNotDeleted }).skip(skip).limit(size);
+  }
+
+  async getTotalUsers(): Promise<number> {
+    return UserModel.countDocuments({ deleted: this.userNotDeleted }).exec();
   }
 
   async getOneUser(id: string): Promise<UserSchema> {

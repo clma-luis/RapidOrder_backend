@@ -20,8 +20,8 @@ const userController = new UserController();
 const { createUser, getAllUsers, getOneUser, updateUser, changeUserPassword, changeUserEmail, removeUser } = userController;
 
 router.post("/create", validateUserBody, validateFields, validateEmail, hashPassword, createUser);
-router.post("/getAllUsers", getAllUsers);
-router.post("/user/:id", validateUserId, getOneUser);
+router.get("/getAllUsers", getAllUsers);
+router.get("/user/:id", validateUserId, getOneUser);
 router.put("/updateUser/:id", validateUserId, validateDataToUpdate, validateFields, updateUser);
 router.post("/removeUser/:id", validateUserId, removeUser);
 router.post("/changePassword/:id", validateUserId, validatePasswordData, validateFields, validateIsDiferentPassword, changeUserPassword);

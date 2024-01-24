@@ -5,13 +5,19 @@ export class UserController {
   constructor() {}
 
   async createUser(req: Request, res: Response) {
-    const result = await userService.creatreUser(req.body);
+    const result = await userService.createUser(req.body);
     res.status(201).json({ message: "User created successfully", result });
   }
 
   async getAllUsers(req: Request, res: Response) {
-    const result = userService.getAllUsers();
-    res.status(200).json({ message: "users found", result });
+    const { page, size } = req.query;
+
+    const [result, total] = await Promise.all([
+      userService.getAllUsers({ page: Number(page), size: Number(size) }),
+      userService.getTotalUsers(),
+    ]);
+
+    res.status(200).json({ message: "users found", result, total, page, size });
   }
 
   async getOneUser(req: Request, res: Response) {

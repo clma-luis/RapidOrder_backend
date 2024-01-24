@@ -37,19 +37,6 @@ export class Server {
     this.app.use("/api/order", orderRoutes);
     this.app.use("/api/menu", menuRoutes);
     this.app.use("/api/seed", seedRoutes);
-
-    this.app.get("/", (req, res) => {
-      res.json({ text: "Get, TypeScript with Express in the Server class!", status: 200 });
-    });
-    this.app.put("/", (req, res) => {
-      res.json({ text: "Put, TypeScript with Express in the Server class!", status: 200 });
-    });
-    this.app.post("/", (req, res) => {
-      res.json({ text: "Post, TypeScript with Express in the Server class!", status: 200 });
-    });
-    this.app.delete("/", (req, res) => {
-      res.json({ text: "delete, TypeScript with Express in the Server class!", status: 200 });
-    });
   }
 
   public listen() {

@@ -13,7 +13,7 @@ class RoleController {
 
   public getAllRoles = async (req: Request, res: Response) => {
     const result = await roleService.getAllRoles();
-    res.status(200).json({ message: "Role founds", result });
+    res.status(200).json({ message: "Roles founds", result });
   };
 
   public getOneRole = async (req: Request, res: Response) => {
