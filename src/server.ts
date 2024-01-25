@@ -4,6 +4,7 @@ import cors from "cors";
 import { dbConnection } from "./database/config";
 import { BASE_URL_PORT } from "./shared/constants/config";
 
+import authRoutes from "./modules/auth/authRoutes";
 import userRoutes from "./modules/user/userRoutes";
 import roleRoutes from "./modules/role/roleRoutes";
 import orderRoutes from "./modules/order/orderRoutes";
@@ -32,6 +33,7 @@ export class Server {
   }
 
   private routes() {
+    this.app.use("/api/auth", authRoutes);
     this.app.use("/api/user", userRoutes);
     this.app.use("/api/role", roleRoutes);
     this.app.use("/api/order", orderRoutes);
