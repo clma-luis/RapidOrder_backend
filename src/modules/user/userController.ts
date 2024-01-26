@@ -51,7 +51,9 @@ export class UserController {
 
   async removeUser(req: Request, res: Response) {
     const { id } = req.params;
+    const { user } = req.body;
+
     const result = await userService.removeUser(id);
-    res.status(200).json({ message: result });
+    res.status(200).json({ message: result, user });
   }
 }

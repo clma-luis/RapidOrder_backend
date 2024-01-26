@@ -72,10 +72,10 @@ export const validateUserId = async (req: Request, res: Response, next: NextFunc
     return res.status(400).json({ message: "the id is not valid" });
   }
 
-  const existId = await UserModel.findById(id);
+  const user = await UserModel.findById(id);
 
-  if (!existId) {
-    return res.status(404).json({ message: "the id does not exist" });
+  if (!user || !!user.deleted) {
+    return res.status(404).json({ message: "the user does not exist" });
   }
 
   next();
