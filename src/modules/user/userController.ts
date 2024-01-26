@@ -28,21 +28,32 @@ export class UserController {
 
   async updateUser(req: Request, res: Response) {
     const { _id, __v, email, password, deleted, ...rest } = req.body;
-    const { id } = req.params;
-    const result = await userService.updateUser(id, rest);
-    res.status(200).json({ message: "updated successfully", result });
+    const { id } = req.body.user;
+
+    try {
+      const result = await userService.updateUser(id, rest);
+      res.status(200).json({ message: "updated successfully", result });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred while updating the user" });
+    }
   }
 
   async changeUserPassword(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id } = req.body.user;
     const { newPassword } = req.body;
 
-    const result = await userService.changeUserPassword(id, newPassword);
-    res.status(200).json({ message: "password updated successfully", result });
+    try {
+      const result = await userService.changeUserPassword(id, newPassword);
+      res.status(200).json({ message: "password updated successfully", result });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred while updating user's password " });
+    }
   }
 
   async changeUserEmail(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id } = req.body.user;
     const { newEmail } = req.body;
 
     const result = await userService.changeUserEmail(id, newEmail);

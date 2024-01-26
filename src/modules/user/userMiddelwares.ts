@@ -1,36 +1,10 @@
 const bcrypt = require("bcrypt");
 import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
-import { body } from "express-validator";
+import { body, check } from "express-validator";
 
-import UserModel from "./userModel";
 import { LETTER_PATTERN, NUMBER_PATTERN, SPECIAL_CHARACTERS_PATTERN } from "../../shared/constants/regex";
 import RoleModel from "../role/roleModel";
-
-export const validateUserBody = [
-  body("name", "Field name is required and string").not().isEmpty().isString(),
-  body("image", "Field image is string").optional().isString(),
-  body("email", "Field email is required and must be available format").not().isEmpty().isEmail(),
-  body("password", "Field password is required and string").custom((value) => validatePasswordConditions(value)),
-  body("role").custom((value) => validateRoleUser(value)),
-];
-
-export const validateDataToUpdate = [
-  body("name", "Field name is required and string").optional().isString(),
-  body("image", "Field image is string").optional().isString(),
-  body("role")
-    .optional()
-    .custom((value) => validateRoleUser(value)),
-];
-
-export const validateEmailData = [
-  body("email", "Field email is required and must be available format").not().isEmpty().isEmail(),
-  body("newEmail", "Field email is required and must be available format")
-    .not()
-    .isEmpty()
-    .isEmail()
-    .custom((value) => {}),
-];
+import UserModel from "./userModel";
 
 export const validatePasswordData = [
   body("password", "Field password is required and string")
@@ -65,18 +39,16 @@ const validateRoleUser = async (value: string) => {
   return true;
 };
 
-export const validateUserId = async (req: Request, res: Response, next: NextFunction) => {
+export const validateExistUserFromIdParams = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  const isValidId = mongoose.isValidObjectId(id);
-  if (!isValidId) {
-    return res.status(400).json({ message: "the id is not valid" });
-  }
 
   const user = await UserModel.findById(id);
 
   if (!user || !!user.deleted) {
     return res.status(404).json({ message: "the user does not exist" });
   }
+
+  req.body.userFromParamsId = user;
 
   next();
 };
@@ -107,8 +79,12 @@ export const validateIsDiferentPassword = async (req: Request, res: Response, ne
   next();
 };
 
-export const validateEmail = async (req: Request, res: Response, next: NextFunction) => {
-  const { email } = req.body;
+export const validateEmailWithDataBase = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, userFromParamsId } = req.body;
+
+  if (userFromParamsId && email !== userFromParamsId?.email) {
+    return res.status(400).json({ message: "The email is different from data base email" });
+  }
 
   compareEmailWithDB(email, res);
 
@@ -128,9 +104,9 @@ export const validateNewEmail = async (req: Request, res: Response, next: NextFu
 };
 
 const compareEmailWithDB = async (email: string, res: Response, errorMessage: string = "Email does not exist in the database") => {
-  const existEmail = await UserModel.findOne({ email }).exec();
+  const user = await UserModel.findOne({ email }).exec();
 
-  if (existEmail) {
+  if (!user) {
     return res.status(400).json({ errors: errorMessage });
   }
 };
@@ -150,3 +126,24 @@ const checkPattern = (value: string, pattern: RegExp, errorMessage: string, erro
     errors.push(errorMessage);
   }
 };
+
+export const validateUserBody = [
+  body("name", "Field name is required and string").not().isEmpty().isString(),
+  body("image", "Field image is string").optional().isString(),
+  body("email", "Field email is required and must be available format").not().isEmpty().isEmail(),
+  body("password", "Field password is required and string").custom((value) => validatePasswordConditions(value)),
+  body("role").custom((value) => validateRoleUser(value)),
+];
+
+export const validateDataToUpdate = [
+  body("name", "Field name is required and string").optional().isString(),
+  body("image", "Field image is string").optional().isString(),
+  body("role")
+    .optional()
+    .custom((value) => validateRoleUser(value)),
+];
+
+export const validateEmailData = [
+  body("email", "Field email is required and must be available format").not().isEmpty().isEmail(),
+  body("newEmail", "Field email is required and must be available format").not().isEmpty().isEmail(),
+];

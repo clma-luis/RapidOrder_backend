@@ -1,9 +1,17 @@
 const jwt = require("jsonwebtoken");
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { check, validationResult } from "express-validator";
 import { JWT_SECRET } from "../constants/config";
 import UserModel from "../../modules/user/userModel";
 import { ADMIN_ROLE } from "../constants/roles";
+import RoleModel from "../../modules/role/roleModel";
+import { isValidObjectId } from "mongoose";
+
+export const validateObjectId = (paramName: string) => {
+  return check(paramName)
+    .custom((value) => isValidObjectId(value))
+    .withMessage("Invalid id from params");
+};
 
 export const validateFields = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
@@ -35,6 +43,8 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
       return res.status(401).json({ message: "Unauthorized - Invalid Token" });
     }
 
+    user.id = user._id;
+    delete user._id;
     req.body.user = user;
 
     next();
