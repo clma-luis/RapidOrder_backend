@@ -1,11 +1,10 @@
 const jwt = require("jsonwebtoken");
 import { NextFunction, Request, Response } from "express";
 import { check, validationResult } from "express-validator";
-import { JWT_SECRET } from "../constants/config";
-import UserModel from "../../modules/user/userModel";
-import { ADMIN_ROLE } from "../constants/roles";
-import RoleModel from "../../modules/role/roleModel";
 import { isValidObjectId } from "mongoose";
+import UserModel from "../../modules/user/userModel";
+import { JWT_SECRET } from "../config/config";
+import { ADMIN_ROLE } from "../constants/roles";
 
 export const validateObjectId = (paramName: string) => {
   return check(paramName)

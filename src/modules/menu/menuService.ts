@@ -22,6 +22,11 @@ export class MenuService {
     return result;
   }
 
+  public async changeMenuStatus(id: string, available: number): Promise<string> {
+    await MenuModel.findOneAndUpdate({ _id: id }, { available }, { new: true }).exec();
+    return "Menu item deleted successfully";
+  }
+
   public async removeMenuItem(id: string): Promise<string> {
     await MenuModel.findOneAndUpdate({ _id: id }, { deleted: 1 }, { new: true }).exec();
     return "Menu item deleted successfully";

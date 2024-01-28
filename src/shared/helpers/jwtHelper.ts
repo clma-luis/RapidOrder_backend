@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-import { JWT_SECRET } from "../constants/config";
+import { JWT_SECRET } from "../config/config";
 
 export const generateJWT = (userId: string, role: string) => {
   if (!userId) return;

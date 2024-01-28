@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { MONGO_CONNECTION_URL } from "../shared/constants/config";
+import { MONGO_CONNECTION_URL } from "../shared/config/config";
 export const dbConnection = async () => {
   const pathConnection = MONGO_CONNECTION_URL as string;
   try {

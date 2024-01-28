@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { body } from "express-validator";
-import mongoose from "mongoose";
+import { IMAGE_EXTENSIONS } from "../../shared/constants/fileExtensions";
+import { validateExistFile, validateFileExtension } from "../../shared/middlewares/fileMiddelwares";
 import MenuModel from "./menuModel";
 
 export const validateMenuItemBody = [
   body("name", "Field name is required and string").not().isEmpty().isString(),
-  body("image", "Field image is required and string").not().isEmpty().isString(),
+  body("image")
+    .custom((_, { req }) => validateExistFile(req as Request, "image"))
+    .custom((_, { req }) => validateFileExtension(req as Request, "image", IMAGE_EXTENSIONS)),
   body("description", "Field description is required and string").not().isEmpty().isString(),
   body("price", "Field price is required and number").not().isEmpty().isNumeric(),
   body("ingredients", "Field ingredients is string[] and required").isArray().not().isEmpty(),
@@ -13,18 +16,34 @@ export const validateMenuItemBody = [
   body("deleted", "Field deleted should be 0 or 1 number").optional().isIn([0, 1]),
 ];
 
-export const validateDishId = async (req: Request, res: Response, next: NextFunction) => {
+export const validateUpdateMenuItemBody = [
+  body("name", "Field name is required and string").optional().notEmpty().isString(),
+  body("image")
+    .custom((_, { req }) => validateExistFile(req as Request, "image"))
+    .custom((_, { req }) => validateFileExtension(req as Request, "image", IMAGE_EXTENSIONS))
+    .if(body("image").exists()),
+  body("description", "Field description is required and string").optional().notEmpty().isString(),
+  body("price", "Field price is required and number").optional().notEmpty().isNumeric(),
+  body("ingredients", "Field ingredients is string[] and required").optional().isArray().notEmpty(),
+];
+
+export const validateChangeStatus = [body("available", "Field available should be 0 or 1 number").notEmpty().isIn([0, 1])];
+
+export const validateExistMenu = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  const isValidId = mongoose.isValidObjectId(id);
-  if (!isValidId) {
-    return res.status(400).json({ message: "the id is not valid" });
+
+  try {
+    const menu = await MenuModel.findById(id);
+
+    if (!menu) {
+      return res.status(404).json({ message: "the id does not exist" });
+    }
+
+    req.body.menu = menu;
+
+    next();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error to find menu" });
   }
-
-  const existId = await MenuModel.findById(id);
-
-  if (!existId) {
-    return res.status(404).json({ message: "the id does not exist" });
-  }
-
-  next();
 };

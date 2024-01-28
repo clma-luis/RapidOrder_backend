@@ -1,15 +1,17 @@
-import express from "express";
+import cloudinary from "cloudinary";
 import cors from "cors";
+import express from "express";
+const fileUpload = require("express-fileupload");
 
 import { dbConnection } from "./database/config";
-import { BASE_URL_PORT } from "./shared/constants/config";
+import { BASE_URL_PORT, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from "./shared/config/config";
 
 import authRoutes from "./modules/auth/authRoutes";
-import userRoutes from "./modules/user/userRoutes";
-import roleRoutes from "./modules/role/roleRoutes";
-import orderRoutes from "./modules/order/orderRoutes";
 import menuRoutes from "./modules/menu/menuRoutes";
+import orderRoutes from "./modules/order/orderRoutes";
+import roleRoutes from "./modules/role/roleRoutes";
 import seedRoutes from "./modules/seeds/seedRoutes";
+import userRoutes from "./modules/user/userRoutes";
 
 export class Server {
   private app: express.Application;
@@ -20,6 +22,7 @@ export class Server {
     this.port = BASE_URL_PORT as string;
     this.connectDataBase();
     this.middlewares();
+    this.configureCloudinary();
     this.routes();
   }
 
@@ -30,6 +33,20 @@ export class Server {
   public middlewares() {
     this.app.use(cors());
     this.app.use(express.json());
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+      })
+    );
+  }
+
+  private configureCloudinary() {
+    cloudinary.v2.config({
+      cloud_name: CLOUDINARY_CLOUD_NAME,
+      api_key: CLOUDINARY_API_KEY,
+      api_secret: CLOUDINARY_API_SECRET,
+    });
   }
 
   private routes() {
