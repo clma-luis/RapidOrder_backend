@@ -12,6 +12,7 @@ export const validateLoginUser = async (req: Request, res: Response, next: NextF
   const { email } = req.body;
   const user = await UserModel.findOne({ email }).exec();
   const passwordMatch = await comparePasswords(req.body.password, user?.password as string);
+
   if (!user) {
     return res.status(400).json({ message: "The email does not exist" });
   } else if (!!user?.deleted) {

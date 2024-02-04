@@ -1,15 +1,16 @@
 import express from "express";
 
-import { OrderService } from "./orderService";
 import { OrderController } from "./orderController";
 
 const router = express.Router();
 
-const orderService = new OrderService();
-const orderController = new OrderController(orderService);
-const { createOrder, getOrderStatus } = orderController;
+const orderController = new OrderController();
+const { createOrder, getOrderStatus, updateOrder, getAllOrdersByUserId, updateOrderStatus } = orderController;
 
 router.post("/create", createOrder);
-router.get("/status/:orderId", getOrderStatus);
+router.get("/getOrdersByUserId/:id", getAllOrdersByUserId);
+router.put("/updateStatus/:id", updateOrderStatus);
+router.put("/updateOrder/:id", updateOrder);
+router.get("/status/:id", getOrderStatus);
 
 export default router;
