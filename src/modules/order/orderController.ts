@@ -34,7 +34,6 @@ export class OrderController {
 
     try {
       const result = await orderService.updateOrder(id, data);
-
       res.status(200).json({ message: "order updated successfully", result });
     } catch (error) {
       console.error(error);
@@ -44,25 +43,21 @@ export class OrderController {
 
   public async updateOrderStatus(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, waiterId } = req.body;
     const io = req.app.get("io");
 
     try {
       const result = await orderService.updateOrderStatus(id, status);
 
       result.status === "ready" &&
-        io.emit("notification", { message: `The order of the table ${result.table} is ready to be delivered`, result });
+        io
+          .to("65b2ea013b3ef466fe6453a1")
+          .emit("notification", { message: `The order of the table ${result.table} is ready to be delivered` });
 
       res.status(200).json({ message: "order status updated successfully", result });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal server error updated status order - try later" });
     }
-  }
-
-  public getOrderStatus(req: Request, res: Response): void {
-    const orderId = req.params.orderId;
-
-    res.json({ status: "ok" });
   }
 }
