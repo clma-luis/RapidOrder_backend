@@ -14,6 +14,7 @@ type OrderItemsType = {
 
 export interface OrderSchema extends Document {
   waiterId: string;
+  chefId: string;
   table: string;
   orderItems: OrderItemsType;
   status: "pending" | "preparing" | "ready" | "done";
@@ -22,6 +23,7 @@ export interface OrderSchema extends Document {
 const OrderSchema = new Schema<OrderSchema>(
   {
     waiterId: { type: String, required: [true, "WaiterId is required"] },
+    chefId: { type: String, required: [true, "ChefId is required"] },
     table: { type: String, required: [true, "Table is required"] },
     orderItems: { type: Object, required: [true, "OrderItems is required"] },
     status: { type: String, default: "pending" },

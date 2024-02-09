@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import { orderService } from "./orderService";
+import { socketEvents } from "../../sockets";
+
+const { NEW_ORDER, NOTIFICATION } = socketEvents;
 
 export class OrderController {
   constructor() {}
@@ -9,7 +12,7 @@ export class OrderController {
     const io = req.app.get("io");
     try {
       const result = await orderService.createOrder(data);
-      io.emit("new-order", { message: "New order created", data });
+      io.emit(NEW_ORDER, { message: "New order created", data });
       res.json(result);
     } catch (error) {
       console.error(error);
@@ -50,9 +53,7 @@ export class OrderController {
       const result = await orderService.updateOrderStatus(id, status);
 
       result.status === "ready" &&
-        io
-          .to("65b2ea013b3ef466fe6453a1")
-          .emit("notification", { message: `The order of the table ${result.table} is ready to be delivered` });
+        io.to(waiterId).emit(NOTIFICATION, { message: `The order of the table ${result.table} is ready to be delivered` });
 
       res.status(200).json({ message: "order status updated successfully", result });
     } catch (error) {
