@@ -6,6 +6,10 @@ import MenuModel from "./menuModel";
 
 export const validateMenuItemBody = [
   body("name", "Field name is required and string").not().isEmpty().isString(),
+  body("type", "Field type is required and string of: <entrada | principal | bebida | postre>")
+    .not()
+    .isEmpty()
+    .isIn(["entrada", "principal", "bebida", "postre"]),
   body("image")
     .custom((_, { req }) => validateExistFile(req as Request, "image"))
     .custom((_, { req }) => validateFileExtension(req as Request, "image", IMAGE_EXTENSIONS)),
@@ -17,14 +21,17 @@ export const validateMenuItemBody = [
 ];
 
 export const validateUpdateMenuItemBody = [
-  body("name", "Field name is required and string").optional().notEmpty().isString(),
+  body("name", "Field name is  string").optional().notEmpty().isString(),
+  body("type", "Field type is string of: <entrada | principal | bebida | postre>")
+    .optional()
+    .isIn(["entrada", "principal", "bebida", "postre"]),
   body("image")
     .custom((_, { req }) => validateExistFile(req as Request, "image"))
     .custom((_, { req }) => validateFileExtension(req as Request, "image", IMAGE_EXTENSIONS))
     .if(body("image").exists()),
-  body("description", "Field description is required and string").optional().notEmpty().isString(),
-  body("price", "Field price is required and number").optional().notEmpty().isNumeric(),
-  body("ingredients", "Field ingredients is string[] and required").optional().isArray().notEmpty(),
+  body("description", "Field description is string").optional().notEmpty().isString(),
+  body("price", "Field price is number").optional().notEmpty().isNumeric(),
+  body("ingredients", "Field ingredients is string[]").optional().isArray().notEmpty(),
 ];
 
 export const validateChangeStatus = [body("available", "Field available should be 0 or 1 number").notEmpty().isIn([0, 1])];

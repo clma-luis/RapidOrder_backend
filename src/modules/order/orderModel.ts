@@ -17,7 +17,7 @@ export interface OrderSchema extends Document {
   chefId: string;
   table: string;
   orderItems: OrderItemsType;
-  status: "pending" | "preparing" | "ready" | "done";
+  status: "pendiente" | "preparando" | "listo" | "entregado";
 }
 
 const OrderSchema = new Schema<OrderSchema>(
@@ -26,7 +26,7 @@ const OrderSchema = new Schema<OrderSchema>(
     chefId: { type: String, required: [true, "ChefId is required"] },
     table: { type: String, required: [true, "Table is required"] },
     orderItems: { type: Object, required: [true, "OrderItems is required"] },
-    status: { type: String, default: "pending" },
+    status: { type: String, default: "pendiente" },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

@@ -7,6 +7,7 @@ export const menuSeedData = [
     ingredients: ["Pescado fresco", "Limón", "Cebolla", "Cilantro", "Ají"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Lomo Saltado",
@@ -16,6 +17,7 @@ export const menuSeedData = [
     ingredients: ["Carne de res", "Cebolla", "Tomate", "Papas", "Sillao"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
 
   {
@@ -26,8 +28,8 @@ export const menuSeedData = [
     ingredients: ["Pollo", "Ají amarillo", "Leche", "Nueces", "Queso"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
-
   {
     name: "Anticuchos",
     image: "anticuchos.jpg",
@@ -36,6 +38,7 @@ export const menuSeedData = [
     ingredients: ["Corazón de res", "Ajo", "Comino", "Ají panca", "Vinagre"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Causa Rellena",
@@ -45,6 +48,7 @@ export const menuSeedData = [
     ingredients: ["Papa amarilla", "Pollo", "Atún", "Mariscos", "Mayonesa"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Rocoto Relleno",
@@ -54,6 +58,7 @@ export const menuSeedData = [
     ingredients: ["Rocotos", "Carne molida", "Huevo duro", "Queso", "Leche"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Cau Cau",
@@ -63,6 +68,7 @@ export const menuSeedData = [
     ingredients: ["Mondongo", "Papa", "Ají amarillo", "Cúrcuma", "Ajo"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Tacu Tacu",
@@ -72,6 +78,7 @@ export const menuSeedData = [
     ingredients: ["Arroz", "Frijoles", "Lomo saltado", "Mariscos", "Pollo"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Chaufa",
@@ -81,6 +88,7 @@ export const menuSeedData = [
     ingredients: ["Arroz", "Pollo", "Carne de res", "Mariscos", "Huevo"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Arroz con Pollo",
@@ -90,6 +98,7 @@ export const menuSeedData = [
     ingredients: ["Arroz", "Pollo", "Cilantro", "Ají amarillo", "Cerveza"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Huancaina",
@@ -99,6 +108,7 @@ export const menuSeedData = [
     ingredients: ["Papa", "Ají amarillo", "Queso fresco", "Leche", "Galletas"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Papa a la Huancaína",
@@ -108,6 +118,7 @@ export const menuSeedData = [
     ingredients: ["Papa", "Ají amarillo", "Queso fresco", "Leche", "Galletas"],
     available: 1,
     deleted: 0,
+    type: "entrada",
   },
   {
     name: "Olluquito con Charqui",
@@ -117,6 +128,7 @@ export const menuSeedData = [
     ingredients: ["Olluco", "Carne de res seca", "Ají panca", "Cebolla", "Tomate"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Seco de Cordero",
@@ -126,6 +138,7 @@ export const menuSeedData = [
     ingredients: ["Cordero", "Frejoles", "Cerveza", "Culantro", "Ajo"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Rocoto Relleno",
@@ -135,6 +148,7 @@ export const menuSeedData = [
     ingredients: ["Rocotos", "Carne molida", "Huevo duro", "Queso", "Leche"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Aji de Gallina",
@@ -144,6 +158,7 @@ export const menuSeedData = [
     ingredients: ["Pollo", "Ají amarillo", "Leche", "Nueces", "Queso"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Ceviche de Mero",
@@ -153,6 +168,7 @@ export const menuSeedData = [
     ingredients: ["Mero", "Limón", "Cebolla", "Cilantro", "Ají"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Parihuela",
@@ -162,6 +178,7 @@ export const menuSeedData = [
     ingredients: ["Pescado", "Mariscos", "Verduras", "Ají panca", "Cilantro"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Chupe de Camarones",
@@ -171,6 +188,7 @@ export const menuSeedData = [
     ingredients: ["Camarones", "Papa", "Maíz", "Huevos", "Leche"],
     available: 1,
     deleted: 0,
+    type: "principal",
   },
   {
     name: "Mazamorra Morada",
@@ -180,6 +198,7 @@ export const menuSeedData = [
     ingredients: ["Maíz morado", "Frutas", "Camote", "Arroz con leche", "Canela"],
     available: 1,
     deleted: 0,
+    type: "postre",
   },
   {
     name: "Suspiro a la Limeña",
@@ -189,5 +208,56 @@ export const menuSeedData = [
     ingredients: ["Leche", "Yema de huevo", "Azúcar", "Canela", "Merengue"],
     available: 1,
     deleted: 0,
+    type: "postre",
+  },
+  {
+    name: "Chicha Morada",
+    image: "chicha_morada.jpg",
+    description: "Bebida morada hecha a base de maíz morado, frutas y especias.",
+    price: 6.99,
+    ingredients: ["Maíz morado", "Frutas", "Canela", "Clavo de olor", "Azúcar"],
+    available: 1,
+    deleted: 0,
+    type: "bebida",
+  },
+  {
+    name: "Pisco Sour",
+    image: "pisco_sour.jpg",
+    description: "Cóctel emblemático peruano hecho con pisco, limón, jarabe de goma y clara de huevo.",
+    price: 9.99,
+    ingredients: ["Pisco", "Limón", "Jarabe de goma", "Clara de huevo", "Hielo"],
+    available: 1,
+    deleted: 0,
+    type: "bebida",
+  },
+  {
+    name: "Inca Kola",
+    image: "inca_kola.jpg",
+    description: "Refresco peruano de color amarillo brillante con sabor a hierbas y frutas.",
+    price: 3.99,
+    ingredients: ["Hierbas", "Frutas", "Azúcar", "Ácido cítrico", "Burbujas"],
+    available: 1,
+    deleted: 0,
+    type: "bebida",
+  },
+  {
+    name: "Mate de Coca",
+    image: "mate_coca.jpg",
+    description: "Infusión caliente hecha con hojas de coca, tradicional en la región andina.",
+    price: 5.99,
+    ingredients: ["Hojas de coca", "Agua caliente", "Otras hierbas opcionales"],
+    available: 1,
+    deleted: 0,
+    type: "bebida",
+  },
+  {
+    name: "Jugo de Maracuyá",
+    image: "jugo_maracuya.jpg",
+    description: "Refrescante jugo de maracuyá, conocido por su sabor tropical.",
+    price: 4.99,
+    ingredients: ["Maracuyá", "Agua", "Azúcar", "Hielo"],
+    available: 1,
+    deleted: 0,
+    type: "bebida",
   },
 ];

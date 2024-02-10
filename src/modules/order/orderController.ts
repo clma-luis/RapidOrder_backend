@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { orderService } from "./orderService";
-import { socketEvents } from "../../sockets";
-
-const { NEW_ORDER, NOTIFICATION } = socketEvents;
+import { KITCHEN_ROOM, NEW_ORDER, NOTIFICATION } from "../../sockets/config";
 
 export class OrderController {
   constructor() {}
@@ -12,7 +10,7 @@ export class OrderController {
     const io = req.app.get("io");
     try {
       const result = await orderService.createOrder(data);
-      io.emit(NEW_ORDER, { message: "New order created", data });
+      io.to(KITCHEN_ROOM).emit(NEW_ORDER, { message: "New order created", data });
       res.json(result);
     } catch (error) {
       console.error(error);
@@ -52,7 +50,7 @@ export class OrderController {
     try {
       const result = await orderService.updateOrderStatus(id, status);
 
-      result.status === "ready" &&
+      result.status === "listo" &&
         io.to(waiterId).emit(NOTIFICATION, { message: `The order of the table ${result.table} is ready to be delivered` });
 
       res.status(200).json({ message: "order status updated successfully", result });

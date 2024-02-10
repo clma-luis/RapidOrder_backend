@@ -2,10 +2,12 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface RoleSchema extends Document {
   role: string;
+  maximumQuantity: number;
 }
 
 const RoleSchema = new Schema<RoleSchema>({
   role: { type: String, required: [true, "Role is required"] },
+  maximumQuantity: { type: Number, required: [true, "acceptedAmount is required"] },
 });
 
 RoleSchema.methods.toJSON = function () {

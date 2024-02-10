@@ -10,9 +10,7 @@ export class OrderService {
   }
 
   public async getAllOrdersByUserId(waiterId: string): Promise<OrderSchema[]> {
-    console.log("waiterId", waiterId);
     const result = await OrderModel.find({ waiterId }).exec();
-    console.log("getAllOrdersByUserId", result);
     return result;
   }
 

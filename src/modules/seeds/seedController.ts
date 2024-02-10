@@ -1,14 +1,11 @@
 const bcrypt = require("bcrypt");
 import { Request, Response } from "express";
 import MenuModel from "../menu/menuModel";
-import { MenuService } from "../menu/menuService";
 import RoleModel from "../role/roleModel";
 import UserModel from "../user/userModel";
 import { menuSeedData } from "./seedData/menuSeedData";
 import { roleSeedData } from "./seedData/roleSeedData";
 import { usersSeedData } from "./seedData/userSeedData";
-
-const menuService = new MenuService();
 
 export class SeedController {
   constructor() {}
