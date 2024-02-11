@@ -10,7 +10,7 @@ export class OrderController {
     const io = req.app.get("io");
     try {
       const result = await orderService.createOrder(data);
-      io.to(KITCHEN_ROOM).emit(NEW_ORDER, { message: "New order created", data });
+      io.to(KITCHEN_ROOM).emit(NEW_ORDER, { message: "New order created", result });
       res.json(result);
     } catch (error) {
       console.error(error);
@@ -42,17 +42,17 @@ export class OrderController {
     }
   }
 
-  public async updateOrderStatus(req: Request, res: Response): Promise<any> {
+  public async updateStatusOrderItems(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
-    const { status, waiterId } = req.body;
+    const { orderItems } = req.body;
     const io = req.app.get("io");
 
     try {
-      const result = await orderService.updateOrderStatus(id, status);
+      const result = await orderService.updateOrderStatus(id, orderItems);
 
-      result.status === "listo" &&
+      /*     result.status === "listo" &&
         io.to(waiterId).emit(NOTIFICATION, { message: `The order of the table ${result.table} is ready to be delivered` });
-
+ */
       res.status(200).json({ message: "order status updated successfully", result });
     } catch (error) {
       console.error(error);
