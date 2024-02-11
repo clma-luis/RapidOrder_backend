@@ -9,9 +9,9 @@ class AuthController {
     const io = req.app.get("io");
 
     try {
-      const tokken = generateJWT(user.id, user.role);
+      const token = generateJWT(user.id, user.role);
       /*       io.emit(JOIN_ROOM, { userId: user.id, role: user.role }); */
-      res.status(200).json({ user, tokken });
+      res.status(200).json({ user, token });
     } catch (error) {
       res.status(500).json({ error: "Internal server error to login - tray again or try later" });
     }

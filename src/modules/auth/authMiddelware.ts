@@ -9,7 +9,8 @@ export const validateLoginBody = [
 ];
 
 export const validateLoginUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
+  console.log("email", email, "password", password);
   const user = await UserModel.findOne({ email }).exec();
   const passwordMatch = await comparePasswords(req.body.password, user?.password as string);
 
