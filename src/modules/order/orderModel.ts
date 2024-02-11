@@ -1,14 +1,14 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-type orderItemType = {
+export type orderItemType = {
   itemName: string;
   quantity: number;
   details: string;
   status: "pendiente" | "en proceso" | "listo" | "entregado";
-  creatredBy: { name: string; id: string };
+  preparedBy: { name: string; id: string };
 };
 
-type OrderItemsType = {
+export type OrderItemsType = {
   starters: orderItemType[];
   mainCourses: orderItemType[];
   desserts: orderItemType[];
@@ -33,9 +33,10 @@ const OrderSchema = new Schema<OrderSchema>(
             menuItemId: { type: String, required: true },
             itemName: { type: String, required: true },
             quantity: { type: Number, required: true },
-            details: { type: String, required: true },
+            details: { type: String, default: "" },
             status: { type: String, default: "pendiente" },
             preparedBy: { type: { name: String, id: String }, default: null },
+            _id: false,
           },
         ],
         mainCourses: [
@@ -43,9 +44,10 @@ const OrderSchema = new Schema<OrderSchema>(
             menuItemId: { type: String, required: true },
             itemName: { type: String, required: true },
             quantity: { type: Number, required: true },
-            details: { type: String, required: true },
+            details: { type: String, default: "" },
             status: { type: String, default: "pendiente" },
             preparedBy: { type: { name: String, id: String }, default: null },
+            _id: false,
           },
         ],
         desserts: [
@@ -53,9 +55,10 @@ const OrderSchema = new Schema<OrderSchema>(
             menuItemId: { type: String, required: true },
             itemName: { type: String, required: true },
             quantity: { type: Number, required: true },
-            details: { type: String, required: true },
+            details: { type: String, default: "" },
             status: { type: String, default: "pendiente" },
             preparedBy: { type: { name: String, id: String }, default: null },
+            _id: false,
           },
         ],
         drinks: [
@@ -63,9 +66,10 @@ const OrderSchema = new Schema<OrderSchema>(
             menuItemId: { type: String, required: true },
             itemName: { type: String, required: true },
             quantity: { type: Number, required: true },
-            details: { type: String, required: true },
+            details: { type: String, default: "" },
             status: { type: String, default: "pendiente" },
             preparedBy: { type: { name: String, id: String }, default: null },
+            _id: false,
           },
         ],
       },

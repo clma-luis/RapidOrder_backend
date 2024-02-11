@@ -1,4 +1,4 @@
-import OrderModel, { OrderSchema } from "./orderModel";
+import OrderModel, { OrderItemsType, OrderSchema, orderItemType } from "./orderModel";
 
 export class OrderService {
   constructor() {}
@@ -19,42 +19,30 @@ export class OrderService {
     return result;
   }
 
-  async updateOrderStatus(id: string, orderItems: any): Promise<OrderSchema> {
+  async updateOrderStatus(id: string, orderItems: OrderItemsType): Promise<OrderSchema> {
     const updateData = {
       $set: {},
     };
 
-    const dessertsUpdates = orderItems.desserts.map((item: any, index: any) => {
-      return {
-        [`orderItems.desserts.${index}.status`]: item.status,
-        [`orderItems.desserts.${index}.preparedBy`]: item.preparedBy,
-      };
-    });
+    const orders: Record<string, orderItemType[]> = orderItems;
 
-    const drinksUpdates = orderItems.drinks.map((item: any, index: any) => {
-      return {
-        [`orderItems.drinks.${index}.status`]: item.status,
-        [`orderItems.drinks.${index}.preparedBy`]: item.preparedBy,
-      };
-    });
+    const updateItems = (category: string) => {
+      return orders[category].map((item: any, index: any) => ({
+        [`orderItems.${category}.${index}.status`]: item.status,
+        [`orderItems.${category}.${index}.preparedBy`]: item.preparedBy,
+      }));
+    };
 
-    const mainCoursesUpdates = orderItems.drinks.map((item: any, index: any) => {
-      return {
-        [`orderItems.mainCourses.${index}.status`]: item.status,
-        [`orderItems.mainCourses.${index}.preparedBy`]: item.preparedBy,
-      };
-    });
+    const allUpdates = Object.keys(orderItems).flatMap((category) => updateItems(category));
 
-    const startersUpdates = orderItems.drinks.map((item: any, index: any) => {
-      return {
-        [`orderItems.starters.${index}.status`]: item.status,
-        [`orderItems.starters.${index}.preparedBy`]: item.preparedBy,
-      };
-    });
+    Object.assign(updateData.$set, ...allUpdates);
 
-    Object.assign(updateData.$set, ...dessertsUpdates, ...drinksUpdates, ...mainCoursesUpdates, ...startersUpdates);
+    const result = await OrderModel.findOneAndUpdate({ _id: id }, updateData, { new: true });
 
-    const result = (await OrderModel.findOneAndUpdate({ _id: id }, updateData, { new: true }).exec()) as OrderSchema;
+    if (!result) {
+      throw new Error(`Not found order with id: ${id}`);
+    }
+
     return result;
   }
 
