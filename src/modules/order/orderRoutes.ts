@@ -1,6 +1,7 @@
 import express from "express";
 
 import { OrderController } from "./orderController";
+import { prepareDataToUpdate } from "./orderMiddelwares";
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ const { createOrder, updateOrder, getAllOrdersByUserId, updateStatusOrderItems }
 
 router.post("/create", createOrder);
 router.get("/getOrdersByUserId/:id", getAllOrdersByUserId);
-router.put("/updateStatusOrderItems/:id", updateStatusOrderItems);
+router.put("/updateStatusOrderItems/:id", prepareDataToUpdate, updateStatusOrderItems);
 router.put("/updateOrder/:id", updateOrder);
 
 export default router;

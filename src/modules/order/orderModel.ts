@@ -22,56 +22,26 @@ export interface OrderSchema extends Document {
   status: "abierto" | "cerrado";
 }
 
+const orderItemCommonProps = {
+  menuItemId: { type: String, required: true },
+  itemName: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  details: { type: String, default: "" },
+  status: { type: String, default: "pendiente" },
+  preparedBy: { type: { name: String, id: String, _id: false }, default: null },
+  _id: false,
+};
+
 const OrderSchema = new Schema<OrderSchema>(
   {
     waiterId: { type: String, required: [true, "WaiterId is required"] },
     table: { type: String, required: [true, "Table is required"] },
     orderItems: {
       type: {
-        starters: [
-          {
-            menuItemId: { type: String, required: true },
-            itemName: { type: String, required: true },
-            quantity: { type: Number, required: true },
-            details: { type: String, default: "" },
-            status: { type: String, default: "pendiente" },
-            preparedBy: { type: { name: String, id: String }, default: null },
-            _id: false,
-          },
-        ],
-        mainCourses: [
-          {
-            menuItemId: { type: String, required: true },
-            itemName: { type: String, required: true },
-            quantity: { type: Number, required: true },
-            details: { type: String, default: "" },
-            status: { type: String, default: "pendiente" },
-            preparedBy: { type: { name: String, id: String }, default: null },
-            _id: false,
-          },
-        ],
-        desserts: [
-          {
-            menuItemId: { type: String, required: true },
-            itemName: { type: String, required: true },
-            quantity: { type: Number, required: true },
-            details: { type: String, default: "" },
-            status: { type: String, default: "pendiente" },
-            preparedBy: { type: { name: String, id: String }, default: null },
-            _id: false,
-          },
-        ],
-        drinks: [
-          {
-            menuItemId: { type: String, required: true },
-            itemName: { type: String, required: true },
-            quantity: { type: Number, required: true },
-            details: { type: String, default: "" },
-            status: { type: String, default: "pendiente" },
-            preparedBy: { type: { name: String, id: String }, default: null },
-            _id: false,
-          },
-        ],
+        starters: [orderItemCommonProps],
+        mainCourses: [orderItemCommonProps],
+        desserts: [orderItemCommonProps],
+        drinks: [orderItemCommonProps],
       },
       validate: {
         validator: function (orderItems: OrderItemsType) {

@@ -1,4 +1,5 @@
-import OrderModel, { OrderItemsType, OrderSchema, orderItemType } from "./orderModel";
+import { UpdateItemsType } from "./orderMiddelwares";
+import OrderModel, { OrderSchema } from "./orderModel";
 
 export class OrderService {
   constructor() {}
@@ -19,23 +20,12 @@ export class OrderService {
     return result;
   }
 
-  async updateOrderStatus(id: string, orderItems: OrderItemsType): Promise<OrderSchema> {
+  async updateOrderStatus(id: string, orderItems: UpdateItemsType[]): Promise<OrderSchema> {
     const updateData = {
       $set: {},
     };
 
-    const orders: Record<string, orderItemType[]> = orderItems;
-
-    const updateItems = (category: string) => {
-      return orders[category].map((item: any, index: any) => ({
-        [`orderItems.${category}.${index}.status`]: item.status,
-        [`orderItems.${category}.${index}.preparedBy`]: item.preparedBy,
-      }));
-    };
-
-    const allUpdates = Object.keys(orderItems).flatMap((category) => updateItems(category));
-
-    Object.assign(updateData.$set, ...allUpdates);
+    Object.assign(updateData.$set, ...orderItems);
 
     const result = await OrderModel.findOneAndUpdate({ _id: id }, updateData, { new: true });
 

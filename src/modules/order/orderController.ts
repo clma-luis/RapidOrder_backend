@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
+import { KITCHEN_ROOM, NEW_ORDER } from "../../sockets/config";
+import { validateOrderToDeliver } from "./orderMiddelwares";
 import { orderService } from "./orderService";
-import { KITCHEN_ROOM, NEW_ORDER, NOTIFICATION } from "../../sockets/config";
 
 export class OrderController {
   constructor() {}
@@ -44,15 +45,13 @@ export class OrderController {
 
   public async updateStatusOrderItems(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
-    const { orderItems } = req.body;
-    const io = req.app.get("io");
+    const { orderItemsAdapted } = req.body;
 
     try {
-      const result = await orderService.updateOrderStatus(id, orderItems);
+      const result = await orderService.updateOrderStatus(id, orderItemsAdapted);
 
-      /*     result.status === "listo" &&
-        io.to(waiterId).emit(NOTIFICATION, { message: `The order of the table ${result.table} is ready to be delivered` });
- */
+      result && validateOrderToDeliver(result, req);
+
       res.status(200).json({ message: "order status updated successfully", result });
     } catch (error) {
       console.error(error);
