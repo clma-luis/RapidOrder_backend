@@ -6,6 +6,7 @@ export type orderItemType = {
   details: string;
   status: "pendiente" | "en proceso" | "listo" | "entregado";
   preparedBy: { fullName: string; id: string };
+  serviceType: "para llevar" | "comer aquí";
 };
 
 export type OrderItemsType = {
@@ -21,7 +22,7 @@ export interface OrderSchema extends Document {
   waiterId: string;
   table: string;
   orderItems: OrderItemsType;
-  additionalOrderItems: OrderItemsType;
+  additionalOrders: OrderItemsType;
   status: "abierto" | "cerrado";
   closedBy: ClosedByType;
 }
@@ -63,7 +64,7 @@ const OrderSchema = new Schema<OrderSchema>(
       required: [true, "OrderItems is required"],
       _id: false,
     },
-    additionalOrderItems: {
+    additionalOrders: {
       type: OrderItemsType,
       default: null,
       _id: false,
