@@ -1,5 +1,5 @@
 import { UpdateItemsType } from "./orderMiddelwares";
-import OrderModel, { OrderSchema } from "./orderModel";
+import OrderModel, { ClosedByType, OrderSchema } from "./orderModel";
 
 export class OrderService {
   constructor() {}
@@ -20,7 +20,7 @@ export class OrderService {
     return result;
   }
 
-  async updateOrderStatus(id: string, orderItems: UpdateItemsType[]): Promise<OrderSchema> {
+  async updateOrderItemsStatus(id: string, orderItems: UpdateItemsType[]): Promise<OrderSchema> {
     const updateData = {
       $set: {},
     };
@@ -36,8 +36,18 @@ export class OrderService {
     return result;
   }
 
+  public async updateOrderStatus(id: string, status: string, closedBy: ClosedByType): Promise<any> {
+    const result = await OrderModel.findOneAndUpdate({ _id: id }, { status, closedBy }, { new: true });
+    return result;
+  }
+
   public getOrderStatus(orderId: string): any {
     return orderId;
+  }
+
+  public async updateOrderTable(id: string, table: string): Promise<any> {
+    const result = await OrderModel.findOneAndUpdate({ _id: id }, { table }, { new: true });
+    return result;
   }
 }
 

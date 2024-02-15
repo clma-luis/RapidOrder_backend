@@ -5,7 +5,7 @@ export type orderItemType = {
   quantity: number;
   details: string;
   status: "pendiente" | "en proceso" | "listo" | "entregado";
-  preparedBy: { name: string; id: string };
+  preparedBy: { fullName: string; id: string };
 };
 
 export type OrderItemsType = {
@@ -15,21 +15,32 @@ export type OrderItemsType = {
   drinks: orderItemType[];
 };
 
+export type ClosedByType = { fullName: string; id: string };
+
 export interface OrderSchema extends Document {
   waiterId: string;
   table: string;
   orderItems: OrderItemsType;
+  additionalOrderItems: OrderItemsType;
   status: "abierto" | "cerrado";
+  closedBy: ClosedByType;
 }
 
 const orderItemCommonProps = {
   menuItemId: { type: String, required: true },
   itemName: { type: String, required: true },
   quantity: { type: Number, required: true },
-  details: { type: String, default: "" },
+  details: { type: String, default: null },
   status: { type: String, default: "pendiente" },
-  preparedBy: { type: { name: String, id: String, _id: false }, default: null },
+  preparedBy: { type: { fullName: String, id: String, _id: false }, default: null },
   _id: false,
+};
+
+const OrderItemsType = {
+  starters: [orderItemCommonProps],
+  mainCourses: [orderItemCommonProps],
+  desserts: [orderItemCommonProps],
+  drinks: [orderItemCommonProps],
 };
 
 const OrderSchema = new Schema<OrderSchema>(
@@ -37,12 +48,7 @@ const OrderSchema = new Schema<OrderSchema>(
     waiterId: { type: String, required: [true, "WaiterId is required"] },
     table: { type: String, required: [true, "Table is required"] },
     orderItems: {
-      type: {
-        starters: [orderItemCommonProps],
-        mainCourses: [orderItemCommonProps],
-        desserts: [orderItemCommonProps],
-        drinks: [orderItemCommonProps],
-      },
+      type: OrderItemsType,
       validate: {
         validator: function (orderItems: OrderItemsType) {
           return (
@@ -57,7 +63,13 @@ const OrderSchema = new Schema<OrderSchema>(
       required: [true, "OrderItems is required"],
       _id: false,
     },
+    additionalOrderItems: {
+      type: OrderItemsType,
+      default: null,
+      _id: false,
+    },
     status: { type: String, default: "abierto" },
+    closedBy: { type: { fullName: String, id: String }, default: null },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );
