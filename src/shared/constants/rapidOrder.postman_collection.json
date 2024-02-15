@@ -1,0 +1,474 @@
+{
+	"info": {
+		"_postman_id": "cc6ee783-e261-4312-bfa6-04b90d120796",
+		"name": "rapidOrder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13231670",
+		"_collection_link": "https://lunar-moon-645566.postman.co/workspace/Team-Workspace~8def922f-ca11-46ba-8f58-3850d17e0da3/collection/13231670-cc6ee783-e261-4312-bfa6-04b90d120796?action=share&source=collection_link&creator=13231670"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "getUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{base_user_url}}/getUsers",
+							"host": [
+								"{{base_url}}{{base_user_url}}"
+							],
+							"path": [
+								"getUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_user_url}}/getUser/:id",
+							"host": [
+								"{{base_url}}{{base_user_url}}"
+							],
+							"path": [
+								"getUser",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Carlos Gomez\",\r\n    \"image\": \"\",\r\n    \"role\": \"WAITER_ROLE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_user_url}}/updateUser",
+							"host": [
+								"{{base_url}}{{base_user_url}}"
+							],
+							"path": [
+								"updateUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Carlos Gomez\",\r\n    \"email\": \"carlosgomez@example.com\",\r\n    \"password\": \"password3!c\",\r\n    \"role\": \"WAITER_ROLE\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_user_url}}/create",
+							"host": [
+								"{{base_url}}{{base_user_url}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_user_url}}/removeUser/:id",
+							"host": [
+								"{{base_url}}{{base_user_url}}"
+							],
+							"path": [
+								"removeUser",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"\",\r\n    \"newPassword\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_user_url}}/changePassword",
+							"host": [
+								"{{base_url}}{{base_user_url}}"
+							],
+							"path": [
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changeEmail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"\",\r\n    \"newEmail\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_user_url}}/changeEmail",
+							"host": [
+								"{{base_url}}{{base_user_url}}"
+							],
+							"path": [
+								"changeEmail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "role",
+			"item": [
+				{
+					"name": "createRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{base_role_url}}/create",
+							"host": [
+								"{{base_url}}{{base_role_url}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllRoles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{base_role_url}}/getAll",
+							"host": [
+								"{{base_url}}{{base_role_url}}"
+							],
+							"path": [
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOneRole",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{base_role_url}}/getOne/:id",
+							"host": [
+								"{{base_url}}{{base_role_url}}"
+							],
+							"path": [
+								"getOne",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateOneRole",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_role_url}}/updateOne/:id",
+							"host": [
+								"{{base_url}}{{base_role_url}}"
+							],
+							"path": [
+								"updateOne",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "romeOneRole",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{base_role_url}}/removeOne/:id",
+							"host": [
+								"{{base_url}}{{base_role_url}}"
+							],
+							"path": [
+								"removeOne",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "menu",
+			"item": [
+				{
+					"name": "createMenuItem",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/createItem",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"createItem"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"javierhernandez@example.com\",\r\n    \"password\": \"password5!e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_auth_url}}/login",
+							"host": [
+								"{{base_url}}{{base_auth_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "createOrder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"waiterId\": \"65b2ea013b3ef466fe6453aa\",\r\n    \"table\": 3,\r\n    \"orderItems\": {\r\n      \"starters\": [\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372ab\",\r\n          \"itemName\": \"Bruschetta\",\r\n          \"quantity\": 2,\r\n          \"details\": \"Con ajo\"\r\n\r\n        }\r\n      ],\r\n      \"mainCourses\": [\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372ac\",\r\n          \"itemName\": \"Anticuchos\",\r\n          \"quantity\": 3\r\n\r\n        },\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372ae\",\r\n          \"itemName\": \"Causa Rellena\",\r\n          \"quantity\": 1\r\n\r\n        }\r\n      ],\r\n      \"desserts\": [\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372b3\",\r\n          \"itemName\": \"Suspiro a la Limeña\",\r\n          \"quantity\": 2,\r\n          \"details\": \"Con merengue\"\r\n\r\n        }\r\n      ],\r\n      \"drinks\": [\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372b8\",\r\n          \"itemName\": \"Inca Kola\",\r\n          \"quantity\": 1,\r\n          \"details\": \"Con burbujas\"\r\n\r\n        },\r\n        {\r\n         \"menuItemId\": \"65b0876d4ce12e9225f372bd\",\r\n          \"itemName\": \"Mate de Coca\",\r\n          \"quantity\": 2\r\n\r\n        }\r\n      ]\r\n    }\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_order_url}}/create",
+							"host": [
+								"{{base_url}}{{base_order_url}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateStatusOrderItems",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"orderItems\": {\r\n      \"starters\": [\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372ab\",\r\n          \"status\": \"en proceso\",\r\n          \"preparedBy\": { \"name\": \"Carlos\", \"id\": \"123dfusdrfjsdf\" }\r\n\r\n        }\r\n      ],\r\n       \"mainCourses\": [\r\n         {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372ac\",\r\n          \"status\": \"listo\",\r\n          \"preparedBy\": { \"name\": \"Carlos\", \"id\": \"123dfusdrfjsdf\" }\r\n\r\n        },\r\n        {\r\n           \"menuItemId\": \"65b0876d4ce12e9225f372ae\",\r\n           \"status\": \"listo\",\r\n           \"preparedBy\": { \"name\": \"Carlos\", \"id\": \"123dfusdrfjsdf\" }\r\n\r\n        }\r\n      ],\r\n      \"desserts\": [\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372b3\",\r\n          \"status\": \"en proceso\",\r\n          \"preparedBy\": { \"name\": \"Carlos\", \"id\": \"123dfusdrfjsdf\" }\r\n\r\n        }\r\n      ],\r\n      \"drinks\": [\r\n        {\r\n          \"menuItemId\": \"65b0876d4ce12e9225f372b8\",\r\n          \"status\": \"en proceso\",\r\n          \"preparedBy\": { \"name\": \"Carlos\", \"id\": \"123dfusdrfjsdf\" }\r\n\r\n        }\r\n      ] */\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}{{base_order_url}}/updateStatusOrderItems/65ca75f3357202dbb1a44561",
+							"host": [
+								"{{base_url}}{{base_order_url}}"
+							],
+							"path": [
+								"updateStatusOrderItems",
+								"65ca75f3357202dbb1a44561"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWIyZWEwMTNiM2VmNDY2ZmU2NDUzYTAiLCJyb2xlIjoiV0FJVEVSX1JPTEUiLCJpYXQiOjE3MDcwMDQ4MTYsImV4cCI6MTcwNzAxMjAxNn0.vXEAk3LYIQknzMfQ7uNn_nOMWmmEJoNXcBxKxMcnxHA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"waiterId\": \"65b2ea013b3ef466fe6453aa\",\r\n  \"table\": 6,\r\n  \"status\": \"ready\",\r\n  \"orderItems\": {\r\n    \"starters\": [\r\n      {\r\n        \"itemName\": \"Caesar Saladsdfsdfsdfdfsdasdfasdf\",\r\n        \"quantity\": 2,\r\n        \"details\": \"No tomatoess\"\r\n      },\r\n      {\r\n        \"itemName\": \"Bruschetta\",\r\n        \"quantity\": 1,\r\n        \"details\": \"With garlicdads\"\r\n      }\r\n    ],\r\n    \"mainCourses\": [\r\n      {\r\n        \"itemName\": \"Main Course\",\r\n        \"quantity\": 2,\r\n        \"details\": \"No onions\"\r\n      },\r\n      {\r\n        \"itemName\": \"Another Dish\",\r\n        \"quantity\": 1,\r\n        \"details\": \"\"\r\n      }\r\n    ],\r\n    \"desserts\": [\r\n      {\r\n        \"itemName\": \"Chocolate Cake\",\r\n        \"quantity\": 1,\r\n        \"details\": \"With ice cream\"\r\n      }\r\n    ],\r\n    \"drinks\": [\r\n      {\r\n        \"itemName\": \"Water\",\r\n        \"quantity\": 2,\r\n        \"details\": \"With ice\"\r\n      },\r\n      {\r\n        \"itemName\": \"Soda\",\r\n        \"quantity\": 1,\r\n        \"details\": \"Sugar-free\"\r\n      }\r\n    ]\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/order/updateStatus/65c43d7a1d98f7ce19069d5c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order",
+						"updateStatus",
+						"65c43d7a1d98f7ce19069d5c"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
