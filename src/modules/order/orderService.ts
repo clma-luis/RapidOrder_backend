@@ -15,11 +15,6 @@ export class OrderService {
     return result;
   }
 
-  async updateOrder(id: string, data: any): Promise<OrderSchema> {
-    const result = (await OrderModel.findOneAndUpdate({ _id: id }, data, { new: true }).exec()) as OrderSchema;
-    return result;
-  }
-
   async updateOrderItemsStatus(id: string, orderItems: UpdateItemsType[]): Promise<OrderSchema> {
     const updateData = {
       $set: {},
@@ -47,6 +42,17 @@ export class OrderService {
 
   public async updateOrderTable(id: string, table: string): Promise<any> {
     const result = await OrderModel.findOneAndUpdate({ _id: id }, { table }, { new: true });
+    return result;
+  }
+
+  public async addAdditionalOrders(id: string, orderItems: any): Promise<any> {
+    const result = await OrderModel.findByIdAndUpdate(
+      { _id: id },
+      {
+        $push: orderItems,
+      },
+      { new: true }
+    );
     return result;
   }
 }

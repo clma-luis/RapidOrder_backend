@@ -50,3 +50,16 @@ export const validateOrderToDeliver = (result: OrderSchema, req: Request) => {
       } ready to be delivered`,
     });
 };
+
+export const prepareDataToAddOrders = (req: Request, res: Response, next: NextFunction) => {
+  const { orderItems } = req.body;
+
+  const currentOrderItems: Record<string, orderItemType[]> = orderItems;
+  const keyOfObject = Object.keys(orderItems);
+
+  const result = keyOfObject.reduce((acc, elem) => ({ ...acc, [`orderItems.${elem}`]: { $each: currentOrderItems[elem] } }), {});
+
+  req.body.orderItemsAdapted = result;
+
+  next();
+};

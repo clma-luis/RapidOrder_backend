@@ -31,19 +31,6 @@ export class OrderController {
     }
   }
 
-  public async updateOrder(req: Request, res: Response): Promise<any> {
-    const { id } = req.params;
-    const data = req.body;
-
-    try {
-      const result = await orderService.updateOrder(id, data);
-      res.status(OK_STATUS).json({ message: "order updated successfully", result });
-    } catch (error) {
-      console.error(error);
-      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error updated order - try later" });
-    }
-  }
-
   public async updateStatusOrderItems(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
     const { orderItemsAdapted } = req.body;
@@ -79,6 +66,18 @@ export class OrderController {
     try {
       const result = await orderService.updateOrderTable(id, table);
       res.status(OK_STATUS).json({ message: "order table updated successfully", result });
+    } catch (error) {
+      console.error(error);
+      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error updated the table's order - try later" });
+    }
+  }
+
+  public async addAdditionalOrders(req: Request, res: Response): Promise<any> {
+    const { id } = req.params;
+    const { orderItemsAdapted } = req.body;
+    try {
+      const result = await orderService.addAdditionalOrders(id, orderItemsAdapted);
+      res.status(OK_STATUS).json({ message: "new order added to the list successfully", result });
     } catch (error) {
       console.error(error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error updated the table's order - try later" });
