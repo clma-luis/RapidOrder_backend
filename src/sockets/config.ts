@@ -16,7 +16,6 @@ export const { KITCHEN_ROOM, WAITER_ROOM } = listOfRooms;
 export const { NEW_ORDER, JOIN_ROOM, NOTIFICATION } = socketEvents;
 
 export const handleRoomToJoin = (role: string, userId: string) => {
-  console.log("pasa por aqui");
   const joinToRoom: Record<string, string> = {
     [CHEF_ROLE]: KITCHEN_ROOM,
     [WAITER_ROLE]: WAITER_ROOM.replace("id", userId),

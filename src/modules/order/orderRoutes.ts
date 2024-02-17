@@ -10,7 +10,7 @@ const { createOrder, getAllOrdersByUserId, updateStatusOrderItems, addAdditional
 
 router.post("/create", createOrder);
 router.post("/addNewOrders/:id", prepareDataToAddOrders, addAdditionalOrders);
-router.get("/getOrdersByUserId/:id", getAllOrdersByUserId);
+router.get("/getOrdersCreatedById/:id", getAllOrdersByUserId);
 router.put("/updateStatusOrderItems/:id", prepareDataToUpdate, updateStatusOrderItems);
 router.put("/updateStatusOrder", updateOrderStatus);
 router.put("/updateOrderTable/:id", prepareDataToUpdate, updateStatusOrderItems);

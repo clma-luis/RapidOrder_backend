@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 const serviceTypeEnum = ["para llevar", "comer aquí"];
 
-export type DetailsOrderItemType = { itemString: string; itemName: string };
+export type DetailsOrderItemType = { menuItemId: string; itemName: string };
 
 export type orderItemType = {
   itemName: string;
@@ -26,7 +26,8 @@ export type OrderItemsType = {
 export type ClosedByType = { fullName: string; id: string };
 
 export interface OrderSchema extends Document {
-  waiterId: string;
+  createdBy: string;
+  creatorFullName: string;
   table: string;
   orderItems: OrderItemsType;
   status: "abierto" | "cerrado";
@@ -51,7 +52,8 @@ const OrderItemsType = {
 
 const OrderSchema = new Schema<OrderSchema>(
   {
-    waiterId: { type: String, required: [true, "WaiterId is required"] },
+    createdBy: { type: String, required: [true, "waiterId is required"] },
+    creatorFullName: { type: String, required: [true, "creatorFullName is required"] },
     table: { type: String, required: [true, "Table is required"] },
     orderItems: {
       type: OrderItemsType,

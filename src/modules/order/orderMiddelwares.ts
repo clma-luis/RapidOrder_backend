@@ -44,7 +44,7 @@ export const validateOrderToDeliver = (result: OrderSchema, req: Request) => {
   const isEqualOne = amountReadyItems === 1;
 
   !!amountReadyItems &&
-    io.to(result.waiterId).emit(NOTIFICATION, {
+    io.to(result.createdBy).emit(NOTIFICATION, {
       message: `There ${isEqualOne ? "is" : "are"} ${amountReadyItems} ${isEqualOne ? "order" : "orders"} of the table ${
         result.table
       } ready to be delivered`,

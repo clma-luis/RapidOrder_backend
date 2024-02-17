@@ -3,6 +3,7 @@ import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../s
 import { KITCHEN_ROOM, NEW_ORDER } from "../../sockets/config";
 import { validateOrderToDeliver } from "./orderMiddelwares";
 import { orderService } from "./orderService";
+import { orderHistoryController } from "../orderHistory/orderHistoryController";
 
 export class OrderController {
   constructor() {}
@@ -12,6 +13,8 @@ export class OrderController {
     const io = req.app.get("io");
     try {
       const result = await orderService.createOrder(data);
+      result && orderHistoryController.createOrderHistory(result, data);
+
       io.to(KITCHEN_ROOM).emit(NEW_ORDER, { message: "New order created", result });
       res.status(CREATED_STATUS).json({ message: "order created successfully", result });
     } catch (error) {
@@ -37,7 +40,7 @@ export class OrderController {
 
     try {
       const result = await orderService.updateOrderItemsStatus(id, orderItemsAdapted);
-
+      //  result && orderHistoryController.createOrderHistory(result, data);
       result && validateOrderToDeliver(result, req);
 
       res.status(OK_STATUS).json({ message: "order status updated successfully", result });
