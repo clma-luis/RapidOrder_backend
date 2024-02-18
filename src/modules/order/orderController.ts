@@ -52,12 +52,14 @@ export class OrderController {
     }
   }
 
-  public async updateOrderStatus(req: Request, res: Response): Promise<any> {
+  public async closeOrder(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
     const { status, closedBy } = req.body;
 
     try {
-      const result = await orderService.updateOrderStatus(id, status, closedBy);
+      const result = await orderService.closeOrder(id, status, closedBy);
+      result && orderHistoryController.closeOrderStatus(id, status, closedBy, result);
+
       res.status(OK_STATUS).json({ message: "order status updated successfully", result });
     } catch (error) {
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error updated status order - try later" });

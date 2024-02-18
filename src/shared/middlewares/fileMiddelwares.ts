@@ -1,5 +1,6 @@
 import cloudinary from "cloudinary";
 import { NextFunction, Request, Response } from "express";
+import { INTERNAL_SERVER_ERROR_STATUS } from "../constants/statusHTTP";
 
 export const validateExistFile = (req: Request, fieldName: string) => {
   if (!req.files || Object.keys(req.files).length === 0 || !req.files[fieldName]) {
@@ -31,7 +32,7 @@ export const uploadImageInCloudinary = async (req: Request, res: Response, next:
   const { fieldName } = req.body;
 
   if (!req.files || Object.keys(req.files).length === 0 || !req.files[fieldName]) {
-    return res.status(500).json({ message: "No files were uploaded or fieldName not found" });
+    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "No files were uploaded or fieldName not found" });
   }
 
   try {
@@ -42,7 +43,7 @@ export const uploadImageInCloudinary = async (req: Request, res: Response, next:
     req.body.cloudUrl = image.secure_url;
     next();
   } catch (error) {
-    return res.status(500).json({ message: "We have problems uploading the image, ple try later" });
+    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "We have problems uploading the image, ple try later" });
   }
 };
 
@@ -50,7 +51,7 @@ export const replaceImageInCloudinary = async (req: Request, res: Response, next
   const { fieldName, menu } = req.body;
 
   if (!req.files || Object.keys(req.files).length === 0 || !req.files[fieldName]) {
-    return res.status(500).json({ message: "No files were uploaded or fieldName not found" });
+    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "No files were uploaded or fieldName not found" });
   }
 
   try {
@@ -62,7 +63,7 @@ export const replaceImageInCloudinary = async (req: Request, res: Response, next
     req.body.cloudUrl = image.secure_url;
     next();
   } catch (error) {
-    return res.status(500).json({ message: "We have problems uploading the image, ple try later" });
+    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "We have problems uploading the image, ple try later" });
   }
 };
 
@@ -80,7 +81,7 @@ export const removeImageFromCloud = async (req: Request, res: Response, next: Ne
       next();
     }
   } catch (error) {
-    return res.status(500).json({ message: "We have problems to delete the image from the cloud, ple try later" });
+    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "We have problems to delete the image from the cloud, ple try later" });
   }
 };
 

@@ -5,6 +5,7 @@ import { isValidObjectId } from "mongoose";
 import UserModel from "../../modules/user/userModel";
 import { JWT_SECRET } from "../config/config";
 import { ADMIN_ROLE } from "../constants/roles";
+import { BAD_REQUEST_STATUS, INTERNAL_SERVER_ERROR_STATUS } from "../constants/statusHTTP";
 
 export const validateObjectId = (paramName: string) => {
   return check(paramName)
@@ -20,7 +21,7 @@ export const validateFields = (req: Request, res: Response, next: NextFunction) 
     const objectErrors: Record<string, any> = errors.mapped();
     const result = errorsFields.map((item) => ({ message: objectErrors[item].msg, field: item }));
 
-    return res.status(400).json({ errors: result });
+    return res.status(BAD_REQUEST_STATUS).json({ errors: result });
   }
 
   next();
@@ -49,7 +50,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
     next();
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ message: "Invalid Token", error });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "Invalid Token", error });
   }
 };
 
@@ -57,11 +58,11 @@ export const validateAdminRole = async (req: Request, res: Response, next: NextF
   const { user } = req.body;
 
   if (!user) {
-    return res.status(500).json({ message: "we have an error, please try again" });
+    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "we have an error, please try again" });
   }
 
   if (user.role !== ADMIN_ROLE) {
-    return res.status(400).json({ message: "unauthorized - invalid role" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "unauthorized - invalid role" });
   }
 
   next();

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { MenuItemSchema } from "./menuModel";
 import { MenuService } from "./menuService";
+import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
 
 export class MenuController {
   private menuService: MenuService;
@@ -18,16 +19,16 @@ export class MenuController {
     try {
       const result = await this.menuService.addMenuItem(data);
 
-      res.status(201).json({ message: "MenuItem created successfully", result });
+      res.status(CREATED_STATUS).json({ message: "MenuItem created successfully", result });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error occurred while creating the current dish menu" });
+      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "An error occurred while creating the current dish menu" });
     }
   };
 
   public getAllMenuItems = async (req: Request, res: Response) => {
     const result = await this.menuService.getAllMenuItems();
-    res.status(200).json({ message: "MenuItems founds", result });
+    res.status(OK_STATUS).json({ message: "MenuItems founds", result });
   };
 
   public getOneMenuItem = async (req: Request, res: Response) => {
@@ -37,10 +38,10 @@ export class MenuController {
       const result = await this.menuService.getOneMenuItem(id);
       if (!result) return res.status(404).json({ message: "The menu does not exist" });
 
-      return res.status(200).json({ message: "MenuItem found", result });
+      return res.status(OK_STATUS).json({ message: "MenuItem found", result });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "An error occurred while getting the current dish menu" });
+      return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "An error occurred while getting the current dish menu" });
     }
   };
 
@@ -54,10 +55,10 @@ export class MenuController {
 
     try {
       const result = await this.menuService.updateMenuItem(id, data);
-      res.status(200).json({ message: "Menu updated successfully", result });
+      res.status(OK_STATUS).json({ message: "Menu updated successfully", result });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error occurred while updating the current dish menu" });
+      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "An error occurred while updating the current dish menu" });
     }
   };
 
@@ -67,16 +68,18 @@ export class MenuController {
 
     try {
       const result = await this.menuService.changeMenuStatus(id, available);
-      res.status(200).json({ message: result });
+      res.status(OK_STATUS).json({ message: result });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error occurred while changing available status of the current dish menu" });
+      res
+        .status(INTERNAL_SERVER_ERROR_STATUS)
+        .json({ message: "An error occurred while changing available status of the current dish menu" });
     }
   };
 
   public removeMenuItem = async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await this.menuService.removeMenuItem(id);
-    res.status(200).json({ message: result });
+    res.status(OK_STATUS).json({ message: result });
   };
 }

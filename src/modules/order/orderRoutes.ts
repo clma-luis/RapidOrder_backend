@@ -6,13 +6,13 @@ import { prepareDataToAddOrders, prepareDataToUpdate } from "./orderMiddelwares"
 const router = express.Router();
 
 const orderController = new OrderController();
-const { createOrder, getAllOrdersByUserId, updateStatusOrderItems, addAdditionalOrders, updateOrderStatus } = orderController;
+const { createOrder, getAllOrdersByUserId, updateStatusOrderItems, addAdditionalOrders, closeOrder } = orderController;
 
 router.post("/create", createOrder);
 router.post("/addNewOrders/:id", prepareDataToAddOrders, addAdditionalOrders);
 router.get("/getOrdersCreatedById/:id", getAllOrdersByUserId);
 router.put("/updateStatusOrderItems/:id", prepareDataToUpdate, updateStatusOrderItems);
-router.put("/updateStatusOrder/:id", updateOrderStatus);
+router.put("/closeOrder/:id", closeOrder);
 router.put("/updateOrderTable/:id", prepareDataToUpdate, updateStatusOrderItems);
 
 export default router;

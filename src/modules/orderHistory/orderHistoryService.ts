@@ -1,3 +1,4 @@
+import { ClosedByType } from "../order/orderModel";
 import OrderHistoryModel, { HistoryType, OrderHistorySchema } from "./orderHistoryModel";
 
 class OrderHistoryService {
@@ -9,23 +10,27 @@ class OrderHistoryService {
     return result;
   }
 
-  public async updateStatusOrderItemsHistory(orderId: string, data: HistoryType): Promise<OrderHistorySchema> {
-    console.log("pasa por updateStatusOrderItemsHistory", data);
+  public async addLogToOrderHistory(orderId: string, data: HistoryType): Promise<OrderHistorySchema> {
     const result = (await OrderHistoryModel.findOneAndUpdate(
       { orderId },
       { $push: { ["history"]: data } },
       { new: true }
     )) as OrderHistorySchema;
-    console.log("result", result);
+
     return result;
   }
 
-  public async getAllOrderHistories(): Promise<OrderHistorySchema[]> {
-    const result = (await OrderHistoryModel.find()) as OrderHistorySchema[];
+  public async getAllOrderHistories({ page, size }: { page: number; size: number }): Promise<OrderHistorySchema[]> {
+    const skip = (page - 1) * size;
+    const result = await OrderHistoryModel.find().skip(skip).limit(size);
     return result;
   }
 
-  public async getOrderHistory(orderId: string): Promise<OrderHistorySchema> {
+  async getTotalOrderHistories(): Promise<number> {
+    return OrderHistoryModel.countDocuments().exec();
+  }
+
+  public async getOneOrderHistory(orderId: string): Promise<OrderHistorySchema> {
     const result = (await OrderHistoryModel.findOne({ orderId })) as OrderHistorySchema;
     return result;
   }

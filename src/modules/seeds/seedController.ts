@@ -6,6 +6,7 @@ import UserModel from "../user/userModel";
 import { menuSeedData } from "./seedData/menuSeedData";
 import { roleSeedData } from "./seedData/roleSeedData";
 import { usersSeedData } from "./seedData/userSeedData";
+import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS } from "../../shared/constants/statusHTTP";
 
 export class SeedController {
   constructor() {}
@@ -14,10 +15,10 @@ export class SeedController {
     try {
       await MenuModel.insertMany(menuSeedData);
 
-      res.status(201).json({ message: "Menu seeded successfully" });
+      res.status(CREATED_STATUS).json({ message: "Menu seeded successfully" });
     } catch (error) {
       console.error("Error seeding menu:", error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error" });
     }
   };
 
@@ -25,10 +26,10 @@ export class SeedController {
     try {
       await RoleModel.insertMany(roleSeedData);
 
-      res.status(201).json({ message: "Roles seeded successfully" });
+      res.status(CREATED_STATUS).json({ message: "Roles seeded successfully" });
     } catch (error) {
       console.error("Error seeding roles:", error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error" });
     }
   };
 
@@ -44,10 +45,10 @@ export class SeedController {
         })
       );
       await UserModel.insertMany(users);
-      res.status(201).json({ message: "Users seeded successfully" });
+      res.status(CREATED_STATUS).json({ message: "Users seeded successfully" });
     } catch (error) {
       console.error("Error seeding users:", error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error" });
     }
   };
 }

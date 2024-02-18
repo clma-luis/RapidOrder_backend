@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+export type StatusOrderType = "abierto" | "cerrado";
 const serviceTypeEnum = ["para llevar", "comer aquí"];
 
 export type DetailsOrderItemType = { menuItemId: string; itemName: string };
@@ -30,7 +31,7 @@ export interface OrderProps {
   creatorFullName: string;
   table: string;
   orderItems: OrderItemsType;
-  status?: "abierto" | "cerrado";
+  status?: StatusOrderType;
   closedBy?: ClosedByType;
 }
 

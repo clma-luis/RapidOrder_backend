@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 import { NextFunction, Request, Response } from "express";
 import { body } from "express-validator";
 import UserModel, { UserSchema } from "../user/userModel";
+import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
 
 export const validateLoginBody = [
   body("email", "Field email is required and must be available format").notEmpty().isEmail(),
@@ -9,17 +10,17 @@ export const validateLoginBody = [
 ];
 
 export const validateLoginUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;
-  console.log("email", email, "password", password);
+  const { email } = req.body;
+
   const user = await UserModel.findOne({ email }).exec();
   const passwordMatch = await comparePasswords(req.body.password, user?.password as string);
 
   if (!user) {
-    return res.status(400).json({ message: "The email does not exist" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "The email does not exist" });
   } else if (!!user?.deleted) {
-    return res.status(400).json({ message: "user deleted" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "user deleted" });
   } else if (!passwordMatch) {
-    return res.status(400).json({ message: "The password is incorrect" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "The password is incorrect" });
   }
 
   const userAdapter = userDataAdapter(user);

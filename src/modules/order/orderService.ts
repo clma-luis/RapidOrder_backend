@@ -31,7 +31,7 @@ export class OrderService {
     return result;
   }
 
-  public async updateOrderStatus(id: string, status: string, closedBy: ClosedByType): Promise<any> {
+  public async closeOrder(id: string, status: string, closedBy: ClosedByType): Promise<any> {
     const result = await OrderModel.findOneAndUpdate({ _id: id }, { status, closedBy }, { new: true });
     return result;
   }

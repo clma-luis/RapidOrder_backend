@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import { IMAGE_EXTENSIONS } from "../../shared/constants/fileExtensions";
 import { validateExistFile, validateFileExtension } from "../../shared/middlewares/fileMiddelwares";
 import MenuModel from "./menuModel";
+import { INTERNAL_SERVER_ERROR_STATUS } from "../../shared/constants/statusHTTP";
 
 export const validateMenuItemBody = [
   body("name", "Field name is required and string").not().isEmpty().isString(),
@@ -51,6 +52,6 @@ export const validateExistMenu = async (req: Request, res: Response, next: NextF
     next();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error to find menu" });
+    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "Internal server error to find menu" });
   }
 };

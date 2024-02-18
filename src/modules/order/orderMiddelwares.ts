@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { NOTIFICATION } from "../../sockets/config";
 import { OrderSchema, orderItemType } from "./orderModel";
+import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
 
 export type UpdateItemsType = {
   [x: string]: any;
@@ -10,7 +11,7 @@ export const prepareDataToUpdate = (req: Request, res: Response, next: NextFunct
   const { orderItems } = req.body;
 
   if (!orderItems) {
-    return res.status(400).json({ message: "orderItems not found" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "orderItems not found" });
   }
 
   const orders: Record<string, orderItemType[]> = orderItems;

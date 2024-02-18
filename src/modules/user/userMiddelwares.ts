@@ -5,6 +5,7 @@ import { body, check } from "express-validator";
 import { LETTER_PATTERN, NUMBER_PATTERN, SPECIAL_CHARACTERS_PATTERN } from "../../shared/constants/regex";
 import RoleModel from "../role/roleModel";
 import UserModel from "./userModel";
+import { BAD_REQUEST_STATUS, INTERNAL_SERVER_ERROR_STATUS } from "../../shared/constants/statusHTTP";
 
 export const validatePasswordData = [
   body("password", "Field password is required and string")
@@ -65,7 +66,7 @@ export const hashPassword = async (req: Request, res: Response, next: NextFuncti
     next();
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error: password not hashed" });
+    res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "Internal server error: password not hashed" });
   }
 };
 
@@ -73,7 +74,7 @@ export const validateIsDiferentPassword = async (req: Request, res: Response, ne
   const { password, newPassword } = req.body;
 
   if (password === newPassword) {
-    return res.status(400).json({ message: "The new password must be different from the old password" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "The new password must be different from the old password" });
   }
 
   next();
@@ -83,7 +84,7 @@ export const validateEmailWithDataBase = async (req: Request, res: Response, nex
   const { email, userFromParamsId } = req.body;
 
   if (userFromParamsId && email !== userFromParamsId?.email) {
-    return res.status(400).json({ message: "The email is different from data base email" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "The email is different from data base email" });
   }
 
   compareEmailWithDB(email, res);
@@ -95,7 +96,7 @@ export const validateNewEmail = async (req: Request, res: Response, next: NextFu
   const { email, newEmail } = req.body;
 
   if (email === newEmail) {
-    return res.status(400).json({ message: "The new email must be different from the old email" });
+    return res.status(BAD_REQUEST_STATUS).json({ message: "The new email must be different from the old email" });
   }
 
   compareEmailWithDB(newEmail, res, "New email already exists in the database");
@@ -107,7 +108,7 @@ const compareEmailWithDB = async (email: string, res: Response, errorMessage: st
   const user = await UserModel.findOne({ email }).exec();
 
   if (!user) {
-    return res.status(400).json({ errors: errorMessage });
+    return res.status(BAD_REQUEST_STATUS).json({ errors: errorMessage });
   }
 };
 
