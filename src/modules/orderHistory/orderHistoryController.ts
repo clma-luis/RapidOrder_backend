@@ -1,32 +1,28 @@
 import { Request, Response } from "express";
+import { INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
 import { ClosedByType, OrderProps, OrderSchema, StatusOrderType } from "../order/orderModel";
 import {
   handleAdapDataToAddNewStatusHistory,
   handleAdaptDatOrderStatus,
   handleAdaptDataToCreateOrderHistory,
+  handleAdaptTableOrder,
 } from "./orderHistoryMiddlewares";
 import { orderHistoryService } from "./orderHistoryService";
-import { INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
-
-export interface CreateOrderData extends OrderSchema {
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 class OrderHistoryController {
   constructor() {}
 
-  public async createOrderHistory(data: CreateOrderData, dataDetails: OrderProps): Promise<any> {
+  public async createOrderHistory(data: OrderSchema, dataDetails: OrderProps): Promise<any> {
     try {
       const dataAdapter = handleAdaptDataToCreateOrderHistory(data, dataDetails);
       await orderHistoryService.createOrderHistory(dataAdapter);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw new Error(`Error to create orderHistory: ${data.id}`);
     }
   }
 
-  public async updateStatusOrderItems(data: CreateOrderData, orderItems: any): Promise<any> {
+  public async updateStatusOrderItems(data: OrderSchema, orderItems: any): Promise<any> {
     const { id } = data;
     try {
       const dataAdapter = handleAdapDataToAddNewStatusHistory(data, orderItems);
@@ -37,7 +33,18 @@ class OrderHistoryController {
     }
   }
 
-  public async closeOrderStatus(id: string, status: StatusOrderType, closedBy: ClosedByType, data: CreateOrderData) {
+  public async updateOrderTableHistory(data: OrderSchema) {
+    const { id } = data;
+    try {
+      const dataAdapter = handleAdaptTableOrder(data);
+      await orderHistoryService.addLogToOrderHistory(id, dataAdapter);
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Error to update table orderHistory: ${id}`);
+    }
+  }
+
+  public async closeOrderStatus(id: string, status: StatusOrderType, closedBy: ClosedByType, data: OrderSchema) {
     try {
       const dataAdapter = handleAdaptDatOrderStatus(data, status, closedBy);
       await orderHistoryService.addLogToOrderHistory(id, dataAdapter);

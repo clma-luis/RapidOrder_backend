@@ -10,7 +10,7 @@ class OrderHistoryService {
     return result;
   }
 
-  public async addLogToOrderHistory(orderId: string, data: HistoryType): Promise<OrderHistorySchema> {
+  public async addLogToOrderHistory(orderId: string, data: HistoryType) {
     const result = (await OrderHistoryModel.findOneAndUpdate(
       { orderId },
       { $push: { ["history"]: data } },

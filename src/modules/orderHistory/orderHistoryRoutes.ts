@@ -3,9 +3,7 @@ import { orderHistoryController } from "./orderHistoryController";
 
 const router = express.Router();
 
-const { addHistory, createOrderHistory, getAllOrderHistories, getOrderHistory } = orderHistoryController;
+const { getAllOrderHistories, getOneOrderHistory } = orderHistoryController;
 
-router.post("/create", createOrderHistory);
-router.put("/addOrderHistory/:id", addHistory);
 router.get("/getAllOrderHistories", getAllOrderHistories);
-router.get("/getOrderHistory/:id", getOrderHistory);
+router.get("/getOrderHistory/:id", getOneOrderHistory);

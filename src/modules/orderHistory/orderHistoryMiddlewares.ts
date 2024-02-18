@@ -1,8 +1,8 @@
-import { ClosedByType, OrderItemsType, StatusOrderType, orderItemType } from "../order/orderModel";
-import { CreateOrderData } from "./orderHistoryController";
-import { OrderHistorySchema } from "./orderHistoryModel";
+import { ClosedByType, OrderItemsType, OrderSchema, StatusOrderType, orderItemType } from "../order/orderModel";
 
-export const handleAdaptDataToCreateOrderHistory = (data: CreateOrderData, dataDetails: any) => {
+import { HistoryType, OrderHistorySchema } from "./orderHistoryModel";
+
+export const handleAdaptDataToCreateOrderHistory = (data: OrderSchema, dataDetails: any) => {
   if (!data || !dataDetails) throw new Error("Data to create order history is required");
   const { id, createdAt, createdBy, creatorFullName } = data;
 
@@ -22,7 +22,7 @@ export const handleAdaptDataToCreateOrderHistory = (data: CreateOrderData, dataD
   return result;
 };
 
-export const handleAdapDataToAddNewStatusHistory = (data: CreateOrderData, orderItems: OrderItemsType) => {
+export const handleAdapDataToAddNewStatusHistory = (data: OrderSchema, orderItems: OrderItemsType): HistoryType => {
   if (!data || !orderItems) throw new Error("Data to create order history is required");
   const { updatedAt, createdBy, creatorFullName } = data;
   const orderItemsAdapted = orderItemsAdapter(orderItems);
@@ -32,7 +32,7 @@ export const handleAdapDataToAddNewStatusHistory = (data: CreateOrderData, order
     date: updatedAt,
     dataDetails: { orderItems: orderItemsAdapted },
     message: `The user ${creatorFullName} has updated status to a menu Items order`,
-  };
+  } as HistoryType;
 
   return result;
 };
@@ -55,7 +55,7 @@ export const orderItemsAdapter = (orderItems: OrderItemsType) => {
   return result;
 };
 
-export const handleAdaptDatOrderStatus = (data: CreateOrderData, status: StatusOrderType, closedBy: ClosedByType) => {
+export const handleAdaptDatOrderStatus = (data: OrderSchema, status: StatusOrderType, closedBy: ClosedByType): HistoryType => {
   if (!data || !status || !closedBy) throw new Error("Data to update order status history is required");
   const { updatedAt, createdBy, creatorFullName } = data;
   const result = {
@@ -64,7 +64,21 @@ export const handleAdaptDatOrderStatus = (data: CreateOrderData, status: StatusO
     date: updatedAt,
     dataDetails: { status, closedBy },
     message: `The user ${creatorFullName} has closed the order`,
-  };
+  } as HistoryType;
+
+  return result;
+};
+
+export const handleAdaptTableOrder = (data: OrderSchema) => {
+  if (!data) throw new Error("Data to update order status history is required");
+  const { updatedAt, createdBy, table, creatorFullName } = data;
+  const result = {
+    action: "Table updated",
+    userDetails: { id: createdBy, fullName: creatorFullName },
+    date: updatedAt,
+    dataDetails: { table },
+    message: `The user ${creatorFullName} has updated the table order`,
+  } as HistoryType;
 
   return result;
 };

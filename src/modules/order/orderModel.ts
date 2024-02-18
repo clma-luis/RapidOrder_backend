@@ -33,6 +33,8 @@ export interface OrderProps {
   orderItems: OrderItemsType;
   status?: StatusOrderType;
   closedBy?: ClosedByType;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type OrderSchema = OrderProps & Document;

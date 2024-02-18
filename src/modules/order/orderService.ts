@@ -22,17 +22,13 @@ export class OrderService {
 
     Object.assign(updateData.$set, ...orderItems);
 
-    const result = await OrderModel.findOneAndUpdate({ _id: id }, updateData, { new: true });
-
-    if (!result) {
-      throw new Error(`Not found order with id: ${id}`);
-    }
+    const result = (await OrderModel.findOneAndUpdate({ _id: id }, updateData, { new: true })) as OrderSchema;
 
     return result;
   }
 
-  public async closeOrder(id: string, status: string, closedBy: ClosedByType): Promise<any> {
-    const result = await OrderModel.findOneAndUpdate({ _id: id }, { status, closedBy }, { new: true });
+  public async closeOrder(id: string, status: string, closedBy: ClosedByType): Promise<OrderSchema> {
+    const result = (await OrderModel.findOneAndUpdate({ _id: id }, { status, closedBy }, { new: true })) as OrderSchema;
     return result;
   }
 
@@ -40,19 +36,19 @@ export class OrderService {
     return orderId;
   }
 
-  public async updateOrderTable(id: string, table: string): Promise<any> {
-    const result = await OrderModel.findOneAndUpdate({ _id: id }, { table }, { new: true });
+  public async updateOrderTable(id: string, table: string): Promise<OrderSchema> {
+    const result = (await OrderModel.findOneAndUpdate({ _id: id }, { table }, { new: true })) as OrderSchema;
     return result;
   }
 
-  public async addAdditionalOrders(id: string, orderItems: any): Promise<any> {
-    const result = await OrderModel.findByIdAndUpdate(
+  public async addAdditionalOrders(id: string, orderItems: any): Promise<OrderSchema> {
+    const result = (await OrderModel.findByIdAndUpdate(
       { _id: id },
       {
         $push: orderItems,
       },
       { new: true }
-    );
+    )) as OrderSchema;
     return result;
   }
 }
