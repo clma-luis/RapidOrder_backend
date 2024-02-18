@@ -4,7 +4,7 @@ export type HistoryType = {
   action: string;
   userDetails: { id: string; fullName: string };
   dataDetails: any;
-  details?: string;
+  message?: string;
   date: Date;
 };
 
@@ -17,8 +17,9 @@ const historyTypeModel = {
   action: { type: String, required: true },
   dataDetails: { type: Schema.Types.Mixed, required: true },
   userDetails: { type: { id: String, fullName: String, _id: false } },
-  details: { type: String, default: null },
+  message: { type: String, default: null },
   date: { type: Date, required: true },
+  _id: false,
 };
 
 const OrderHistorySchema = new Schema<OrderHistorySchema>({

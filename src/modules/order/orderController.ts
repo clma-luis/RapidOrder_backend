@@ -3,7 +3,8 @@ import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../s
 import { KITCHEN_ROOM, NEW_ORDER } from "../../sockets/config";
 import { validateOrderToDeliver } from "./orderMiddelwares";
 import { orderService } from "./orderService";
-import { orderHistoryController } from "../orderHistory/orderHistoryController";
+import { CreateOrderData, orderHistoryController } from "../orderHistory/orderHistoryController";
+import { OrderProps } from "./orderModel";
 
 export class OrderController {
   constructor() {}
@@ -13,7 +14,7 @@ export class OrderController {
     const io = req.app.get("io");
     try {
       const result = await orderService.createOrder(data);
-      result && orderHistoryController.createOrderHistory(result, data);
+      result && orderHistoryController.createOrderHistory(result as CreateOrderData, data as OrderProps);
 
       io.to(KITCHEN_ROOM).emit(NEW_ORDER, { message: "New order created", result });
       res.status(CREATED_STATUS).json({ message: "order created successfully", result });
@@ -36,11 +37,12 @@ export class OrderController {
 
   public async updateStatusOrderItems(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
-    const { orderItemsAdapted } = req.body;
+    const { orderItems, orderItemsAdapted } = req.body;
 
     try {
       const result = await orderService.updateOrderItemsStatus(id, orderItemsAdapted);
-      //  result && orderHistoryController.createOrderHistory(result, data);
+      result && orderHistoryController.updateStatusOrderItems(result as CreateOrderData, orderItems);
+
       result && validateOrderToDeliver(result, req);
 
       res.status(OK_STATUS).json({ message: "order status updated successfully", result });

@@ -12,7 +12,7 @@ router.post("/create", createOrder);
 router.post("/addNewOrders/:id", prepareDataToAddOrders, addAdditionalOrders);
 router.get("/getOrdersCreatedById/:id", getAllOrdersByUserId);
 router.put("/updateStatusOrderItems/:id", prepareDataToUpdate, updateStatusOrderItems);
-router.put("/updateStatusOrder", updateOrderStatus);
+router.put("/updateStatusOrder/:id", updateOrderStatus);
 router.put("/updateOrderTable/:id", prepareDataToUpdate, updateStatusOrderItems);
 
 export default router;

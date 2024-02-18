@@ -1,4 +1,4 @@
-import OrderHistoryModel, { OrderHistorySchema } from "./orderHistoryModel";
+import OrderHistoryModel, { HistoryType, OrderHistorySchema } from "./orderHistoryModel";
 
 class OrderHistoryService {
   constructor() {}
@@ -9,8 +9,14 @@ class OrderHistoryService {
     return result;
   }
 
-  public async addHistory(orderId: string, data: OrderHistorySchema): Promise<OrderHistorySchema> {
-    const result = (await OrderHistoryModel.findOneAndUpdate({ orderId }, { data }, { new: true })) as OrderHistorySchema;
+  public async updateStatusOrderItemsHistory(orderId: string, data: HistoryType): Promise<OrderHistorySchema> {
+    console.log("pasa por updateStatusOrderItemsHistory", data);
+    const result = (await OrderHistoryModel.findOneAndUpdate(
+      { orderId },
+      { $push: { ["history"]: data } },
+      { new: true }
+    )) as OrderHistorySchema;
+    console.log("result", result);
     return result;
   }
 

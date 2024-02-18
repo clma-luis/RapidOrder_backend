@@ -23,16 +23,18 @@ export type OrderItemsType = {
   drinks: orderItemType[];
 };
 
-export type ClosedByType = { fullName: string; id: string };
+export type ClosedByType = { fullName: string; userId: string };
 
-export interface OrderSchema extends Document {
+export interface OrderProps {
   createdBy: string;
   creatorFullName: string;
   table: string;
   orderItems: OrderItemsType;
-  status: "abierto" | "cerrado";
-  closedBy: ClosedByType;
+  status?: "abierto" | "cerrado";
+  closedBy?: ClosedByType;
 }
+
+export type OrderSchema = OrderProps & Document;
 
 const orderItemCommonProps = {
   details: { type: { itemName: String, menuItemId: String }, required: true, _id: false },

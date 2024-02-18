@@ -1,26 +1,37 @@
 import { Request, Response } from "express";
-import { OrderHistorySchema } from "./orderHistoryModel";
+import { OrderProps, OrderSchema } from "../order/orderModel";
+import { handleAdapDataToAddNewStatusHistory, handleAdaptDataToCreateOrderHistory } from "./orderHistoryMiddlewares";
 import { orderHistoryService } from "./orderHistoryService";
+
+export interface CreateOrderData extends OrderSchema {
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 class OrderHistoryController {
   constructor() {}
 
-  public async createOrderHistory(data: any, dataDetails: any): Promise<any> {
-    const dataAdapter = {
-      orderId: data.id,
-      history: [
-        {
-          action: "crear",
-          userDetails: { id: data.createdBy, fullName: data.creatorFullName },
-          date: data.createdAt,
-          dataDetails,
-        },
-      ],
-    } as OrderHistorySchema;
-    await orderHistoryService.createOrderHistory(dataAdapter);
+  public async createOrderHistory(data: CreateOrderData, dataDetails: OrderProps): Promise<any> {
+    try {
+      const dataAdapter = handleAdaptDataToCreateOrderHistory(data, dataDetails);
+      await orderHistoryService.createOrderHistory(dataAdapter);
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Error to create orderHistory: ${data.id}`);
+    }
   }
 
-  public async addHistory(req: Request, res: Response): Promise<any> {}
+  public async updateStatusOrderItems(data: CreateOrderData, orderItems: any): Promise<any> {
+    console.log("esta pasaongo por updateStatusOrderItems controller orderhistory");
+    const { id } = data;
+    try {
+      const dataAdapter = handleAdapDataToAddNewStatusHistory(data, orderItems);
+      await orderHistoryService.updateStatusOrderItemsHistory(id, dataAdapter);
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Error to update status orderHistory: ${data.id}`);
+    }
+  }
 
   public async getAllOrderHistories(req: Request, res: Response): Promise<any> {}
 
