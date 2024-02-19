@@ -1,4 +1,4 @@
-import { UpdateItemsType } from "./orderMiddelwares";
+import { UpdateItemsType } from "./orderMiddlewares";
 import OrderModel, { ClosedByType, OrderSchema } from "./orderModel";
 
 export class OrderService {
@@ -12,6 +12,11 @@ export class OrderService {
 
   public async getAllOrdersByUserId(waiterId: string): Promise<OrderSchema[]> {
     const result = await OrderModel.find({ waiterId }).exec();
+    return result;
+  }
+
+  public async getOneOrderItem(id: string): Promise<OrderSchema> {
+    const result = (await OrderModel.findById(id)) as OrderSchema;
     return result;
   }
 
@@ -44,14 +49,21 @@ export class OrderService {
         closedBy: 1,
         createdAt: 1,
         updatedAt: 1,
+        _id: 0,
       },
+      lean: true,
     })) as OrderSchema;
+
+    if (result) {
+      result.id = result._id;
+      delete result._id;
+    }
 
     return result;
   }
 
-  public async closeOrder(id: string, status: string, closedBy: ClosedByType): Promise<OrderSchema> {
-    const result = (await OrderModel.findOneAndUpdate({ _id: id }, { status, closedBy }, { new: true })) as OrderSchema;
+  public async closeOrder(id: string, status: string, closedBy: ClosedByType, payMethod: string): Promise<OrderSchema> {
+    const result = (await OrderModel.findOneAndUpdate({ _id: id }, { status, closedBy, payMethod }, { new: true })) as OrderSchema;
     return result;
   }
 

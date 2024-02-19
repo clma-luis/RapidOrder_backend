@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
 import { NOTIFICATION } from "../../sockets/config";
 import OrderModel, { OrderSchema, orderItemType } from "./orderModel";
-import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
-import mongoose from "mongoose";
+import { orderService } from "./orderService";
 
 export type UpdateItemsType = {
   [x: string]: any;
@@ -55,6 +55,18 @@ export const prepareDataToAddOrders = (req: Request, res: Response, next: NextFu
   const result = keyOfObject.reduce((acc, elem) => ({ ...acc, [`orderItems.${elem}`]: { $each: currentOrderItems[elem] } }), {});
 
   req.body.orderItemsAdapted = result;
+
+  next();
+};
+
+export const handleTotalPriceToPay = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  const result = await orderService.getOneOrderItem(id);
+
+  const orderItems = result.orderItems;
+
+  console.log("resul", result);
 
   next();
 };

@@ -1,7 +1,8 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 
 import { OrderController } from "./orderController";
-import { prepareDataToAddOrders, prepareDataToUpdate } from "./orderMiddelwares";
+import { handleTotalPriceToPay, prepareDataToAddOrders, prepareDataToUpdate } from "./orderMiddlewares";
+import OrderModel from "./orderModel";
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.post("/create", createOrder);
 router.post("/addNewOrders/:id", prepareDataToAddOrders, addAdditionalOrders);
 router.get("/getOrdersCreatedById/:id", getAllOrdersByUserId);
 router.put("/updateStatusOrderItems/:id", prepareDataToUpdate, updateStatusOrderItems);
-router.put("/closeOrder/:id", closeOrder);
+router.put("/closeOrder/:id", handleTotalPriceToPay, closeOrder);
 router.put("/updateOrderTable/:id", updateOrderTable);
 
 export default router;

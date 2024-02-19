@@ -13,8 +13,6 @@ export type orderItemType = {
   status: "pendiente" | "en proceso" | "listo" | "entregado";
   preparedBy: { fullName: string; id: string };
   serviceType: "para llevar" | "comer aquí";
-  totalToPay: number;
-  payMethod: "efectivo" | "yape" | "punto de venta";
 };
 
 export type OrderItemsType = {
@@ -36,6 +34,8 @@ export interface OrderProps {
   createdAt?: Date;
   updatedAt?: Date;
   totalReadyOrders?: number;
+  totalToPay?: number;
+  payMethod?: "efectivo" | "yape" | "tarjeta";
 }
 
 export type OrderSchema = OrderProps & Document;
@@ -78,7 +78,9 @@ const OrderSchema = new Schema<OrderSchema>(
       _id: false,
     },
     status: { type: String, default: "abierto" },
-    closedBy: { type: { fullName: String, id: String }, default: null },
+    closedBy: { type: { fullName: String, userId: String, _id: false }, default: null },
+    payMethod: { type: { fullName: String, userId: String }, default: null },
+    totalToPay: { type: { fullName: Number, userId: String }, default: null },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );
@@ -87,6 +89,7 @@ OrderSchema.methods.toJSON = function () {
   const { __v, _id, orderItems, ...order } = this.toObject();
   order.id = _id.toString();
   order.orderItems = handleIdAdapter(orderItems);
+
   return order;
 };
 

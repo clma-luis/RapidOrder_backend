@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
 import { KITCHEN_ROOM, NEW_ORDER } from "../../sockets/config";
-import { validateOrderToDeliver } from "./orderMiddelwares";
+import { validateOrderToDeliver } from "./orderMiddlewares";
 import { orderService } from "./orderService";
 import { orderHistoryController } from "../orderHistory/orderHistoryController";
 import { OrderProps, OrderSchema } from "./orderModel";
@@ -41,7 +41,7 @@ export class OrderController {
 
     try {
       const result = await orderService.updateOrderItemsStatus(id, orderItemsAdapted);
-      const { totalReadyOrders, ...rest } = result.toObject();
+      const { totalReadyOrders, ...rest } = result;
       result && orderHistoryController.updateStatusOrderItems(result as OrderSchema, orderItems);
 
       result && validateOrderToDeliver(result, req);
@@ -55,10 +55,10 @@ export class OrderController {
 
   public async closeOrder(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
-    const { status, closedBy } = req.body;
+    const { status, closedBy, payMethod } = req.body;
 
     try {
-      const result = await orderService.closeOrder(id, status, closedBy);
+      const result = await orderService.closeOrder(id, status, closedBy, payMethod);
       result && orderHistoryController.closeOrderStatus(id, status, closedBy, result);
 
       res.status(OK_STATUS).json({ message: "order status updated successfully", result });
