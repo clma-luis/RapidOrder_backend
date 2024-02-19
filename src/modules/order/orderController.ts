@@ -41,11 +41,12 @@ export class OrderController {
 
     try {
       const result = await orderService.updateOrderItemsStatus(id, orderItemsAdapted);
+      const { totalReadyOrders, ...rest } = result.toObject();
       result && orderHistoryController.updateStatusOrderItems(result as OrderSchema, orderItems);
 
       result && validateOrderToDeliver(result, req);
 
-      res.status(OK_STATUS).json({ message: "order status updated successfully", result });
+      res.status(OK_STATUS).json({ message: "order status updated successfully", result: rest });
     } catch (error) {
       console.error(error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error updated status order - try later" });

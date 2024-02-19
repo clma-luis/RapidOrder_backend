@@ -22,7 +22,30 @@ export class OrderService {
 
     Object.assign(updateData.$set, ...orderItems);
 
-    const result = (await OrderModel.findOneAndUpdate({ _id: id }, updateData, { new: true })) as OrderSchema;
+    const result = (await OrderModel.findOneAndUpdate({ _id: id }, updateData, {
+      new: true,
+      projection: {
+        totalReadyOrders: {
+          $sum: {
+            $map: {
+              input: {
+                $concatArrays: ["$orderItems.starters", "$orderItems.mainCourses", "$orderItems.desserts", "$orderItems.drinks"],
+              },
+              as: "orderItem",
+              in: { $cond: [{ $eq: ["$$orderItem.status", "listo"] }, 1, 0] },
+            },
+          },
+        },
+        createdBy: 1,
+        creatorFullName: 1,
+        table: 1,
+        orderItems: 1,
+        status: 1,
+        closedBy: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    })) as OrderSchema;
 
     return result;
   }

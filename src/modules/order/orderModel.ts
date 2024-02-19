@@ -35,6 +35,7 @@ export interface OrderProps {
   closedBy?: ClosedByType;
   createdAt?: Date;
   updatedAt?: Date;
+  totalReadyOrders?: number;
 }
 
 export type OrderSchema = OrderProps & Document;

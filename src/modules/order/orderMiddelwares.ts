@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { NOTIFICATION } from "../../sockets/config";
-import { OrderSchema, orderItemType } from "./orderModel";
+import OrderModel, { OrderSchema, orderItemType } from "./orderModel";
 import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
+import mongoose from "mongoose";
 
 export type UpdateItemsType = {
   [x: string]: any;
@@ -30,23 +31,16 @@ export const prepareDataToUpdate = (req: Request, res: Response, next: NextFunct
   next();
 };
 
-export const validateOrderToDeliver = (result: OrderSchema, req: Request) => {
+export const validateOrderToDeliver = async (result: OrderSchema, req: Request) => {
   const io = req.app.get("io");
 
-  const currentOrderItems: Record<string, orderItemType[]> = result.orderItems;
-  const keyOfObject = Object.keys((result.orderItems as any).toObject());
-  const filteredOrderItemss = keyOfObject.reduce(
-    (acc, el) => ({ ...acc, [el]: currentOrderItems[el].filter((item) => item.status === "listo") }),
-    {}
-  ) as Record<string, orderItemType[]>;
+  const totalReadyOrders = result.totalReadyOrders;
 
-  const amountReadyItems = keyOfObject.reduce((acc, el) => acc + filteredOrderItemss[el].length, 0);
+  const isEqualOne = totalReadyOrders === 1;
 
-  const isEqualOne = amountReadyItems === 1;
-
-  !!amountReadyItems &&
+  !!totalReadyOrders &&
     io.to(result.createdBy).emit(NOTIFICATION, {
-      message: `There ${isEqualOne ? "is" : "are"} ${amountReadyItems} ${isEqualOne ? "order" : "orders"} of the table ${
+      message: `There ${isEqualOne ? "is" : "are"} ${totalReadyOrders} ${isEqualOne ? "order" : "orders"} of the table ${
         result.table
       } ready to be delivered`,
     });
