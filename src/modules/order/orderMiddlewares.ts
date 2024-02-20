@@ -11,8 +11,13 @@ export const validateOrderBody = [
   body("orderItems", "Field orderItems is required and array").custom((value) => validateOrderItems(value)),
 ];
 
-export const validateOrderItems = (value: OrderItemsType) => {
+export const validateAddNewOrders = [
+  body("orderItems", "Field orderItems is required and array").custom((value, { req }) => validateOrderItems(value, req as Request)),
+];
+
+export const validateOrderItems = (value: OrderItemsType, req?: Request) => {
   const ordersItemsAdapter = adaptOrderItemsToUniqueArray(value);
+  if (req) req.body.ordersItemsAdapter = ordersItemsAdapter;
 
   if (ordersItemsAdapter.length === 0) throw new Error("At least one order item is required.");
 
@@ -40,7 +45,7 @@ export const validateExistOrderFromIdParams = async (req: Request, res: Response
   if (!order) return res.status(404).json({ message: "the order does not exist" });
   else if (order.status === StatusOrder.CLOSED) return res.status(404).json({ message: "the order is already closed" });
 
-  req.body.dataBaseOrder = order;
+  req.body.order = order;
 
   next();
 };
@@ -115,10 +120,6 @@ export const handleTotalPriceToPay = async (req: Request, res: Response, next: N
 };
 
 export const handleOrderSumPrices = (orderItems: OrderItemsType) => {
-  const currentOrderItems: Record<string, orderItemType[]> = orderItems;
-
-  const keyOfObject = Object.keys(orderItems);
-
   const handlePriceMenuItem = (price: number, quantity: number) => {
     if (!price || !quantity) return 0;
 

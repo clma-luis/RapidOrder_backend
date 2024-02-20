@@ -54,16 +54,22 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-export const validateAdminRole = async (req: Request, res: Response, next: NextFunction) => {
-  const { user } = req.body;
+export const validateRole = (roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const { user } = req.body;
 
-  if (!user) {
-    return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "we have an error, please try again" });
-  }
+    if (!user) {
+      return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "we have an error, please try again" });
+    }
 
-  if (user.role !== ADMIN_ROLE) {
-    return res.status(BAD_REQUEST_STATUS).json({ message: "unauthorized - invalid role" });
-  }
+    if (!roles.includes(user.role)) {
+      return res.status(BAD_REQUEST_STATUS).json({ message: "unauthorized - invalid role" });
+    }
 
-  next();
+    /*     if (user.role !== ADMIN_ROLE) {
+      return res.status(BAD_REQUEST_STATUS).json({ message: "unauthorized - invalid role" });
+    }
+ */
+    next();
+  };
 };
