@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export type StatusOrderType = "abierto" | "cerrado";
 const serviceTypeEnum = ["para llevar", "comer aquí"];
 
-export type DetailsOrderItemType = { menuItemId: string; itemName: string };
+export type DetailsOrderItemType = { menuItemId: string; itemName: string; price: number };
 
 export type orderItemType = {
   itemName: string;
@@ -34,14 +34,14 @@ export interface OrderProps {
   createdAt?: Date;
   updatedAt?: Date;
   totalReadyOrders?: number;
-  totalToPay?: number;
+  totalPrice: number;
   payMethod?: "efectivo" | "yape" | "tarjeta";
 }
 
 export type OrderSchema = OrderProps & Document;
 
 const orderItemCommonProps = {
-  details: { type: { itemName: String, menuItemId: String }, required: true, _id: false },
+  details: { type: { itemName: String, menuItemId: String, price: Number }, required: true, _id: false },
   quantity: { type: Number, required: true },
   observation: { type: String, default: null },
   status: { type: String, default: "pendiente" },
@@ -80,7 +80,7 @@ const OrderSchema = new Schema<OrderSchema>(
     status: { type: String, default: "abierto" },
     closedBy: { type: { fullName: String, userId: String, _id: false }, default: null },
     payMethod: { type: { fullName: String, userId: String }, default: null },
-    totalToPay: { type: { fullName: Number, userId: String }, default: null },
+    totalPrice: { type: Number, default: 0 },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

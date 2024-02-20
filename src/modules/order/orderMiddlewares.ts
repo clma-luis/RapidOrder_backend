@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
 import { NOTIFICATION } from "../../sockets/config";
-import OrderModel, { OrderSchema, orderItemType } from "./orderModel";
+import { OrderItemsType, OrderSchema, orderItemType } from "./orderModel";
 import { orderService } from "./orderService";
 
 export type UpdateItemsType = {
@@ -60,13 +60,31 @@ export const prepareDataToAddOrders = (req: Request, res: Response, next: NextFu
 };
 
 export const handleTotalPriceToPay = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
+  const { orderItems } = req.body;
 
-  const result = await orderService.getOneOrderItem(id);
+  const result = handleOrderSumPrices(orderItems);
 
-  const orderItems = result.orderItems;
-
-  console.log("resul", result);
+  req.body.totalPrice = result;
 
   next();
+};
+
+export const handleOrderSumPrices = (orderItems: OrderItemsType) => {
+  const currentOrderItems: Record<string, orderItemType[]> = orderItems;
+
+  const keyOfObject = Object.keys(orderItems);
+
+  const handlePriceMenuItem = (price: number, quantity: number) => {
+    if (!price || !quantity) return 0;
+
+    return price * quantity;
+  };
+
+  return keyOfObject
+    .reduce((acc: orderItemType[], el) => {
+      const currentItem = !!currentOrderItems[el].length ? currentOrderItems[el] : [];
+
+      return [...acc, ...currentItem];
+    }, [])
+    .reduce((acc, el) => acc + handlePriceMenuItem(el.details.price, el.quantity), 0);
 };

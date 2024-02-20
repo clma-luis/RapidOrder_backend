@@ -1,4 +1,4 @@
-import { UpdateItemsType } from "./orderMiddlewares";
+import { UpdateItemsType, handleOrderSumPrices } from "./orderMiddlewares";
 import OrderModel, { ClosedByType, OrderSchema } from "./orderModel";
 
 export class OrderService {
@@ -84,6 +84,13 @@ export class OrderService {
       },
       { new: true }
     )) as OrderSchema;
+
+    return result;
+  }
+
+  public async updateTotalPrice(id: string, totalPrice: number): Promise<OrderSchema> {
+    const result = (await OrderModel.findByIdAndUpdate({ _id: id }, { totalPrice }, { new: true })) as OrderSchema;
+
     return result;
   }
 }

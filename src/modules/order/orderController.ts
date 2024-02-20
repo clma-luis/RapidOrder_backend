@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
 import { KITCHEN_ROOM, NEW_ORDER } from "../../sockets/config";
-import { validateOrderToDeliver } from "./orderMiddlewares";
+import { handleOrderSumPrices, validateOrderToDeliver } from "./orderMiddlewares";
 import { orderService } from "./orderService";
 import { orderHistoryController } from "../orderHistory/orderHistoryController";
 import { OrderProps, OrderSchema } from "./orderModel";
@@ -85,7 +85,13 @@ export class OrderController {
     const { id } = req.params;
     const { orderItemsAdapted } = req.body;
     try {
-      const result = await orderService.addAdditionalOrders(id, orderItemsAdapted);
+      const resultUpdate = await orderService.addAdditionalOrders(id, orderItemsAdapted);
+      const orderItemsMongoose = resultUpdate.orderItems;
+      const orderItems = (orderItemsMongoose as any).toObject();
+      const totalPrice = handleOrderSumPrices(orderItems);
+
+      const result = await orderService.updateTotalPrice(id, totalPrice);
+
       res.status(OK_STATUS).json({ message: "new order added to the list successfully", result });
     } catch (error) {
       console.error(error);
