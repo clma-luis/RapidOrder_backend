@@ -81,7 +81,7 @@ export class OrderController {
     }
   }
 
-  public async addAdditionalOrders(req: Request, res: Response): Promise<any> {
+  public async addNewOrders(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
     const { orderItemsAdapted } = req.body;
     try {

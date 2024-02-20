@@ -1,6 +1,25 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export type StatusOrderType = "abierto" | "cerrado";
+
+export enum StatusOrder {
+  OPEN = "abierto",
+  CLOSED = "cerrado",
+}
+
+export enum ServiceType {
+  TAKE_AWAY = "para llevar",
+  TAKE_HERE = "comer aquí",
+  DELIVERY = "delivery",
+}
+
+export enum StatusOrderItem {
+  PENDING = "pendiente",
+  IN_PROGRESS = "en proceso",
+  READY = "listo",
+  DELIVERED = "entregado",
+}
+
 const serviceTypeEnum = ["para llevar", "comer aquí"];
 
 export type DetailsOrderItemType = { menuItemId: string; itemName: string; price: number };
@@ -10,9 +29,9 @@ export type orderItemType = {
   quantity: number;
   details: DetailsOrderItemType;
   observation: string;
-  status: "pendiente" | "en proceso" | "listo" | "entregado";
+  status: StatusOrderItem;
   preparedBy: { fullName: string; id: string };
-  serviceType: "para llevar" | "comer aquí";
+  serviceType: ServiceType;
 };
 
 export type OrderItemsType = {
@@ -29,7 +48,7 @@ export interface OrderProps {
   creatorFullName: string;
   table: string;
   orderItems: OrderItemsType;
-  status?: StatusOrderType;
+  status?: StatusOrder;
   closedBy?: ClosedByType;
   createdAt?: Date;
   updatedAt?: Date;
@@ -58,7 +77,7 @@ const OrderItemsType = {
 
 const OrderSchema = new Schema<OrderSchema>(
   {
-    createdBy: { type: String, required: [true, "waiterId is required"] },
+    createdBy: { type: String, required: [true, "createdBy is required"] },
     creatorFullName: { type: String, required: [true, "creatorFullName is required"] },
     table: { type: String, required: [true, "Table is required"] },
     orderItems: {

@@ -10,8 +10,8 @@ export class OrderService {
     return result;
   }
 
-  public async getAllOrdersByUserId(waiterId: string): Promise<OrderSchema[]> {
-    const result = await OrderModel.find({ waiterId }).exec();
+  public async getAllOrdersByUserId(createdBy: string): Promise<OrderSchema[]> {
+    const result = await OrderModel.find({ createdBy }).exec();
     return result;
   }
 

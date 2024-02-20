@@ -1,8 +1,53 @@
 import { NextFunction, Request, Response } from "express";
 import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
 import { NOTIFICATION } from "../../sockets/config";
-import { OrderItemsType, OrderSchema, orderItemType } from "./orderModel";
-import { orderService } from "./orderService";
+import OrderModel, { OrderItemsType, OrderSchema, StatusOrder, orderItemType } from "./orderModel";
+import { body } from "express-validator";
+
+export const validateOrderBody = [
+  body("createdBy", "Field createdBy is required and string").notEmpty().isString(),
+  body("creatorFullName", "Field creatorFullName is required and string").notEmpty().isString(),
+  body("table", "Field table is required and string").notEmpty().isString(),
+  body("orderItems", "Field orderItems is required and array").custom((value) => validateOrderItems(value)),
+];
+
+export const validateOrderItems = (value: OrderItemsType) => {
+  const ordersItemsAdapter = adaptOrderItemsToUniqueArray(value);
+
+  if (ordersItemsAdapter.length === 0) throw new Error("At least one order item is required.");
+
+  let error = "";
+
+  for (let i = 0; i < ordersItemsAdapter.length; i++) {
+    const item = ordersItemsAdapter[i];
+
+    if (!item.hasOwnProperty("details") || !item.hasOwnProperty("quantity") || !item.hasOwnProperty("serviceType")) {
+      error = "details, quantity and serviceType are required in orderItems.";
+      break;
+    }
+  }
+
+  if (!!error) throw new Error(error);
+
+  return true;
+};
+
+export const validateExistOrderFromIdParams = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  const order = await OrderModel.findById(id);
+
+  if (!order) return res.status(404).json({ message: "the order does not exist" });
+  else if (order.status === StatusOrder.CLOSED) return res.status(404).json({ message: "the order is already closed" });
+
+  req.body.dataBaseOrder = order;
+
+  next();
+};
+
+//========================================================
+//========================================================
+//========================================================
 
 export type UpdateItemsType = {
   [x: string]: any;
@@ -80,11 +125,20 @@ export const handleOrderSumPrices = (orderItems: OrderItemsType) => {
     return price * quantity;
   };
 
-  return keyOfObject
-    .reduce((acc: orderItemType[], el) => {
-      const currentItem = !!currentOrderItems[el].length ? currentOrderItems[el] : [];
+  return adaptOrderItemsToUniqueArray(orderItems).reduce((acc, el) => acc + handlePriceMenuItem(el.details.price, el.quantity), 0);
+};
 
-      return [...acc, ...currentItem];
-    }, [])
-    .reduce((acc, el) => acc + handlePriceMenuItem(el.details.price, el.quantity), 0);
+const adaptOrderItemsToUniqueArray = (orderItems: OrderItemsType) => {
+  if (!orderItems) return [];
+  const currentOrderItems: Record<string, orderItemType[]> = orderItems;
+
+  const keyOfObject = Object.keys(orderItems);
+
+  const result = keyOfObject.reduce((acc: orderItemType[], el) => {
+    const currentItem = !!currentOrderItems[el].length ? currentOrderItems[el] : [];
+
+    return [...acc, ...currentItem];
+  }, []);
+
+  return result;
 };

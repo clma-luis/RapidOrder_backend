@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
-import { ClosedByType, OrderProps, OrderSchema, StatusOrderType } from "../order/orderModel";
+import { ClosedByType, OrderProps, OrderSchema, StatusOrder } from "../order/orderModel";
 import {
   handleAdapDataToAddNewStatusHistory,
   handleAdaptDatOrderStatus,
@@ -44,7 +44,7 @@ class OrderHistoryController {
     }
   }
 
-  public async closeOrderStatus(id: string, status: StatusOrderType, closedBy: ClosedByType, data: OrderSchema) {
+  public async closeOrderStatus(id: string, status: StatusOrder, closedBy: ClosedByType, data: OrderSchema) {
     try {
       const dataAdapter = handleAdaptDatOrderStatus(data, status, closedBy);
       await orderHistoryService.addLogToOrderHistory(id, dataAdapter);
