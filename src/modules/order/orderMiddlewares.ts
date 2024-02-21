@@ -17,7 +17,7 @@ export const validateAddNewOrders = [
 
 export const validateOrderItems = (value: OrderItemsType, req?: Request) => {
   const ordersItemsAdapter = adaptOrderItemsToUniqueArray(value);
-  if (req) req.body.ordersItemsAdapter = ordersItemsAdapter;
+  if (req) req.body.ordersItemsArray = ordersItemsAdapter;
 
   if (ordersItemsAdapter.length === 0) throw new Error("At least one order item is required.");
 
