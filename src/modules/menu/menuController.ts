@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { MenuItemSchema } from "./menuModel";
 import { MenuService } from "./menuService";
-import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
+import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, NOT_FOUND, OK_STATUS } from "../../shared/constants/statusHTTP";
 
 export class MenuController {
   private menuService: MenuService;
@@ -9,7 +9,7 @@ export class MenuController {
     this.menuService = menuService;
   }
 
-  public createMenuItem = async (req: Request, res: Response): Promise<any> => {
+  public createMenuItem = async (req: Request, res: Response) => {
     const { cloudUrl, image, ...rest } = req.body;
     const data = {
       ...rest,
@@ -36,7 +36,7 @@ export class MenuController {
 
     try {
       const result = await this.menuService.getOneMenuItem(id);
-      if (!result) return res.status(404).json({ message: "The menu does not exist" });
+      if (!result) return res.status(NOT_FOUND).json({ message: "The menu does not exist" });
 
       return res.status(OK_STATUS).json({ message: "MenuItem found", result });
     } catch (error) {

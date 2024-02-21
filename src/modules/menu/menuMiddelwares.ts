@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import { IMAGE_EXTENSIONS } from "../../shared/constants/fileExtensions";
 import { validateExistFile, validateFileExtension } from "../../shared/middlewares/fileMiddelwares";
 import MenuModel from "./menuModel";
-import { INTERNAL_SERVER_ERROR_STATUS } from "../../shared/constants/statusHTTP";
+import { INTERNAL_SERVER_ERROR_STATUS, NOT_FOUND } from "../../shared/constants/statusHTTP";
 
 export const validateMenuItemBody = [
   body("name", "Field name is required and string").not().isEmpty().isString(),
@@ -44,7 +44,7 @@ export const validateExistMenu = async (req: Request, res: Response, next: NextF
     const menu = await MenuModel.findById(id);
 
     if (!menu) {
-      return res.status(404).json({ message: "the id does not exist" });
+      return res.status(NOT_FOUND).json({ message: "the id does not exist" });
     }
 
     req.body.menu = menu;

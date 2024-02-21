@@ -10,12 +10,14 @@ import {
   validateAddNewOrders,
   validateExistOrderFromIdParams,
   validateOrderBody,
+  validateOrderItemToUpdate,
 } from "./orderMiddlewares";
 
 const router = express.Router();
 
 const orderController = new OrderController();
-const { createOrder, getAllOrdersByUserId, updateStatusOrderItems, updateOrderTable, addNewOrders, closeOrder } = orderController;
+const { createOrder, getAllOrdersByUserId, updateOneOrderItemById, updateStatusOrderItems, updateOrderTable, addNewOrders, closeOrder } =
+  orderController;
 
 router.post(
   "/create",
@@ -45,6 +47,17 @@ router.get(
   validateExistOrderFromIdParams,
   getAllOrdersByUserId
 );
+
+router.put(
+  "/updateOneOrderItemById/:id",
+  validateObjectId("id"),
+  validateToken,
+  validateRole([ADMIN_ROLE, WAITER_ROLE]),
+  validateExistOrderFromIdParams,
+  validateOrderItemToUpdate,
+  updateOneOrderItemById
+);
+
 router.put(
   "/updateStatusOrderItems/:id",
   validateObjectId("id"),

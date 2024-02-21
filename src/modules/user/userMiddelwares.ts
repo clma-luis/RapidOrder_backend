@@ -5,7 +5,7 @@ import { body, check } from "express-validator";
 import { LETTER_PATTERN, NUMBER_PATTERN, SPECIAL_CHARACTERS_PATTERN } from "../../shared/constants/regex";
 import RoleModel from "../role/roleModel";
 import UserModel from "./userModel";
-import { BAD_REQUEST_STATUS, INTERNAL_SERVER_ERROR_STATUS } from "../../shared/constants/statusHTTP";
+import { BAD_REQUEST_STATUS, INTERNAL_SERVER_ERROR_STATUS, NOT_FOUND } from "../../shared/constants/statusHTTP";
 
 export const validatePasswordData = [
   body("password", "Field password is required and string")
@@ -46,7 +46,7 @@ export const validateExistUserFromIdParams = async (req: Request, res: Response,
   const user = await UserModel.findById(id);
 
   if (!user || !!user.deleted) {
-    return res.status(404).json({ message: "the user does not exist" });
+    return res.status(NOT_FOUND).json({ message: "the user does not exist" });
   }
 
   req.body.userFromParamsId = user;

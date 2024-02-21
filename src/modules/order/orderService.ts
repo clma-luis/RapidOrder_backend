@@ -1,26 +1,46 @@
-import { UpdateItemsType, handleOrderSumPrices } from "./orderMiddlewares";
-import OrderModel, { ClosedByType, OrderSchema } from "./orderModel";
+import mongoose from "mongoose";
+import { UpdateItemsType } from "./orderMiddlewares";
+import OrderModel, { ClosedByType, OrderSchema, orderItemType } from "./orderModel";
 
-export class OrderService {
+class OrderService {
   constructor() {}
 
-  public async createOrder(data: OrderSchema): Promise<OrderSchema> {
+  public async createOrderService(data: OrderSchema): Promise<OrderSchema> {
     const order = new OrderModel({ ...data });
     const result = await order.save();
     return result;
   }
 
-  public async getAllOrdersByUserId(createdBy: string): Promise<OrderSchema[]> {
+  public async getAllOrdersByUserIdService(createdBy: string): Promise<OrderSchema[]> {
     const result = await OrderModel.find({ createdBy }).exec();
     return result;
   }
 
-  public async getOneOrderItem(id: string): Promise<OrderSchema> {
+  public async getOneOrderItemService(id: string): Promise<OrderSchema> {
     const result = (await OrderModel.findById(id)) as OrderSchema;
     return result;
   }
 
-  async updateOrderItemsStatus(id: string, orderItems: UpdateItemsType[]): Promise<OrderSchema> {
+  public async updateOneOrderItemService(id: string, data: orderItemType): Promise<OrderSchema> {
+    const { quantity, observation, serviceType, type } = data;
+
+    const updateFields = {
+      [`orderItems.${type}.$[elem].quantity`]: quantity,
+      [`orderItems.${type}.$[elem].observation`]: observation,
+      [`orderItems.${type}.$[elem].serviceType`]: serviceType,
+    };
+
+    const options = {
+      new: true,
+      arrayFilters: [{ "elem._id": new mongoose.Types.ObjectId(data.id) }],
+    };
+
+    const result = (await OrderModel.findOneAndUpdate({ _id: id }, { $set: updateFields }, options)) as OrderSchema;
+
+    return result;
+  }
+
+  async updateOrderItemsStatusService(id: string, orderItems: UpdateItemsType[]): Promise<OrderSchema> {
     const updateData = {
       $set: {},
     };
@@ -62,7 +82,7 @@ export class OrderService {
     return result;
   }
 
-  public async closeOrder(id: string, status: string, closedBy: ClosedByType, payMethod: string): Promise<OrderSchema> {
+  public async closeOrderService(id: string, status: string, closedBy: ClosedByType, payMethod: string): Promise<OrderSchema> {
     const result = (await OrderModel.findOneAndUpdate({ _id: id }, { status, closedBy, payMethod }, { new: true })) as OrderSchema;
     return result;
   }
@@ -71,12 +91,12 @@ export class OrderService {
     return orderId;
   }
 
-  public async updateOrderTable(id: string, table: string): Promise<OrderSchema> {
+  public async updateOrderTableService(id: string, table: string): Promise<OrderSchema> {
     const result = (await OrderModel.findOneAndUpdate({ _id: id }, { table }, { new: true })) as OrderSchema;
     return result;
   }
 
-  public async addAdditionalOrders(id: string, orderItems: any): Promise<OrderSchema> {
+  public async addAdditionalOrdersService(id: string, orderItems: any): Promise<OrderSchema> {
     const result = (await OrderModel.findByIdAndUpdate(
       { _id: id },
       {
@@ -88,7 +108,7 @@ export class OrderService {
     return result;
   }
 
-  public async updateTotalPrice(id: string, totalPrice: number): Promise<OrderSchema> {
+  public async updateTotalPriceService(id: string, totalPrice: number): Promise<OrderSchema> {
     const result = (await OrderModel.findByIdAndUpdate({ _id: id }, { totalPrice }, { new: true })) as OrderSchema;
 
     return result;

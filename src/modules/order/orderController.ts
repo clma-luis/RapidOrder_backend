@@ -1,19 +1,29 @@
 import { Request, Response } from "express";
 import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
 import { KITCHEN_ROOM, NEW_ORDER } from "../../sockets/config";
-import { handleOrderSumPrices, validateOrderToDeliver } from "./orderMiddlewares";
-import { orderService } from "./orderService";
 import { orderHistoryController } from "../orderHistory/orderHistoryController";
+import { handleOrderSumPrices, validateOrderToDeliver } from "./orderMiddlewares";
 import { OrderProps, OrderSchema } from "./orderModel";
+import { orderService } from "./orderService";
+
+const {
+  createOrderService,
+  getAllOrdersByUserIdService,
+  updateOrderItemsStatusService,
+  addAdditionalOrdersService,
+  updateTotalPriceService,
+  updateOrderTableService,
+  closeOrderService,
+} = orderService;
 
 export class OrderController {
   constructor() {}
 
-  public async createOrder(req: Request, res: Response): Promise<any> {
+  public async createOrder(req: Request, res: Response) {
     const data = req.body;
     const io = req.app.get("io");
     try {
-      const result = await orderService.createOrder(data);
+      const result = await createOrderService(data);
       result && orderHistoryController.createOrderHistory(result as OrderSchema, data as OrderProps);
 
       io.to(KITCHEN_ROOM).emit(NEW_ORDER, { message: "New order created", result });
@@ -24,10 +34,10 @@ export class OrderController {
     }
   }
 
-  public async getAllOrdersByUserId(req: Request, res: Response): Promise<any> {
+  public async getAllOrdersByUserId(req: Request, res: Response) {
     const { id } = req.params;
     try {
-      const result = await orderService.getAllOrdersByUserId(id);
+      const result = await getAllOrdersByUserIdService(id);
       res.status(OK_STATUS).json({ message: "orders founds successfully", result });
     } catch (error) {
       console.error(error);
@@ -35,12 +45,25 @@ export class OrderController {
     }
   }
 
-  public async updateStatusOrderItems(req: Request, res: Response): Promise<any> {
+  public async updateOneOrderItemById(req: Request, res: Response) {
+    const { id } = req.params;
+    const { newOrderItem } = req.body;
+
+    try {
+      const result = await orderService.updateOneOrderItemService(id, newOrderItem);
+      res.status(OK_STATUS).json({ message: "order item updated successfully", result });
+    } catch (error) {
+      console.error(error);
+      res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error updating one order item - try later" });
+    }
+  }
+
+  public async updateStatusOrderItems(req: Request, res: Response) {
     const { id } = req.params;
     const { orderItems, orderItemsAdapted } = req.body;
 
     try {
-      const result = await orderService.updateOrderItemsStatus(id, orderItemsAdapted);
+      const result = await updateOrderItemsStatusService(id, orderItemsAdapted);
       const { totalReadyOrders, ...rest } = result;
       result && orderHistoryController.updateStatusOrderItems(result as OrderSchema, orderItems);
 
@@ -53,12 +76,12 @@ export class OrderController {
     }
   }
 
-  public async closeOrder(req: Request, res: Response): Promise<any> {
+  public async closeOrder(req: Request, res: Response) {
     const { id } = req.params;
     const { status, closedBy, payMethod } = req.body;
 
     try {
-      const result = await orderService.closeOrder(id, status, closedBy, payMethod);
+      const result = await closeOrderService(id, status, closedBy, payMethod);
       result && orderHistoryController.closeOrderStatus(id, status, closedBy, result);
 
       res.status(OK_STATUS).json({ message: "order status updated successfully", result });
@@ -67,12 +90,12 @@ export class OrderController {
     }
   }
 
-  public async updateOrderTable(req: Request, res: Response): Promise<any> {
+  public async updateOrderTable(req: Request, res: Response) {
     const { id } = req.params;
     const { table } = req.body;
 
     try {
-      const result = await orderService.updateOrderTable(id, table);
+      const result = await updateOrderTableService(id, table);
       result && orderHistoryController.updateOrderTableHistory(result);
       res.status(OK_STATUS).json({ message: "order table updated successfully", result });
     } catch (error) {
@@ -81,16 +104,16 @@ export class OrderController {
     }
   }
 
-  public async addNewOrders(req: Request, res: Response): Promise<any> {
+  public async addNewOrders(req: Request, res: Response) {
     const { id } = req.params;
     const { orderItemsAdapted } = req.body;
     try {
-      const resultUpdate = await orderService.addAdditionalOrders(id, orderItemsAdapted);
+      const resultUpdate = await addAdditionalOrdersService(id, orderItemsAdapted);
       const orderItemsMongoose = resultUpdate.orderItems;
       const orderItems = (orderItemsMongoose as any).toObject();
       const totalPrice = handleOrderSumPrices(orderItems);
 
-      const result = await orderService.updateTotalPrice(id, totalPrice);
+      const result = await updateTotalPriceService(id, totalPrice);
 
       res.status(OK_STATUS).json({ message: "new order added to the list successfully", result });
     } catch (error) {

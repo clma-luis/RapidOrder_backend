@@ -12,7 +12,7 @@ import { orderHistoryService } from "./orderHistoryService";
 class OrderHistoryController {
   constructor() {}
 
-  public async createOrderHistory(data: OrderSchema, dataDetails: OrderProps): Promise<any> {
+  public async createOrderHistory(data: OrderSchema, dataDetails: OrderProps) {
     try {
       const dataAdapter = handleAdaptDataToCreateOrderHistory(data, dataDetails);
       await orderHistoryService.createOrderHistory(dataAdapter);
@@ -22,7 +22,7 @@ class OrderHistoryController {
     }
   }
 
-  public async updateStatusOrderItems(data: OrderSchema, orderItems: any): Promise<any> {
+  public async updateStatusOrderItems(data: OrderSchema, orderItems: any) {
     const { id } = data;
     try {
       const dataAdapter = handleAdapDataToAddNewStatusHistory(data, orderItems);
@@ -54,7 +54,7 @@ class OrderHistoryController {
     }
   }
 
-  public async getAllOrderHistories(req: Request, res: Response): Promise<any> {
+  public async getAllOrderHistories(req: Request, res: Response) {
     const { page, size } = req.query;
 
     try {

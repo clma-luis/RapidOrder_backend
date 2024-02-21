@@ -1,8 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import { BAD_REQUEST_STATUS } from "../../shared/constants/statusHTTP";
-import { NOTIFICATION } from "../../sockets/config";
-import OrderModel, { OrderItemsType, OrderSchema, StatusOrder, orderItemType } from "./orderModel";
 import { body } from "express-validator";
+import { isValidObjectId } from "mongoose";
+import { BAD_REQUEST_STATUS, NOT_FOUND } from "../../shared/constants/statusHTTP";
+import { NOTIFICATION } from "../../sockets/config";
+import { OrderItemsType, OrderSchema, StatusOrder, StatusOrderItem, orderItemType } from "./orderModel";
+import { orderService } from "./orderService";
+
+const { getOneOrderItemService } = orderService;
+
+export const translateTypeOrderItem: Record<string, string> = {
+  entrada: "starters",
+  principal: "mainCourses",
+  bebida: "drinks",
+  postre: "desserts",
+};
 
 export const validateOrderBody = [
   body("createdBy", "Field createdBy is required and string").notEmpty().isString(),
@@ -40,14 +51,52 @@ export const validateOrderItems = (value: OrderItemsType, req?: Request) => {
 export const validateExistOrderFromIdParams = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
-  const order = await OrderModel.findById(id);
+  const order = await getOneOrderItemService(id);
 
-  if (!order) return res.status(404).json({ message: "the order does not exist" });
-  else if (order.status === StatusOrder.CLOSED) return res.status(404).json({ message: "the order is already closed" });
+  if (!order) return res.status(NOT_FOUND).json({ message: "the order does not exist" });
+  else if (order.status === StatusOrder.CLOSED) return res.status(NOT_FOUND).json({ message: "the order is already closed" });
 
   req.body.order = order;
 
   next();
+};
+
+export const validateOrderItemToUpdate = async (req: Request, res: Response, next: NextFunction) => {
+  const { orderItem, order } = req.body;
+
+  if (!orderItem) return res.status(BAD_REQUEST_STATUS).json({ message: "orderItem is required" });
+
+  if (Array.isArray(orderItem)) return res.status(BAD_REQUEST_STATUS).json({ message: "orderItem must be an object" });
+
+  if (!isValidObjectId(orderItem.id)) return res.status(BAD_REQUEST_STATUS).json({ message: "Invalid id from orderItem" });
+
+  const ordersItemsAdapter = adaptOrderItemsToUniqueArray((order.orderItems as any).toObject());
+
+  const itemFounded = ordersItemsAdapter.find((item: any) => item._id.toString() === orderItem.id) as orderItemType;
+
+  if (!itemFounded) {
+    return res.status(NOT_FOUND).json({ message: "orderItem not found" });
+  }
+
+  validateOrderItemFieldsToUpdate(res, itemFounded, orderItem);
+  const { id, quantity, observation, serviceType, type } = orderItem;
+
+  req.body.newOrderItem = { id, quantity, observation, serviceType, type: translateTypeOrderItem[type] };
+
+  next();
+};
+
+const validateOrderItemFieldsToUpdate = (res: Response, item: orderItemType, dataToUpdate: orderItemType) => {
+  const orderDeliverd = item.status === StatusOrderItem.DELIVERED;
+  const orderPending = item.status === StatusOrderItem.PENDING;
+
+  if (orderDeliverd) {
+    return res.status(BAD_REQUEST_STATUS).json({ error: "orderItem is already delivered" });
+  }
+
+  if (item.quantity !== dataToUpdate.quantity && !orderPending) {
+    return res.status(BAD_REQUEST_STATUS).json({ error: "orderItem quantity cannot be changed after being prepared" });
+  }
 };
 
 //========================================================
@@ -140,6 +189,7 @@ const adaptOrderItemsToUniqueArray = (orderItems: OrderItemsType) => {
 
     return [...acc, ...currentItem];
   }, []);
+  // console.log("result", result);
 
   return result;
 };

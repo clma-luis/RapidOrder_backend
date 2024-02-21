@@ -32,6 +32,8 @@ export type orderItemType = {
   status: StatusOrderItem;
   preparedBy: { fullName: string; id: string };
   serviceType: ServiceType;
+  type: string;
+  id?: string;
 };
 
 export type OrderItemsType = {
@@ -66,6 +68,7 @@ const orderItemCommonProps = {
   status: { type: String, default: "pendiente" },
   serviceType: { type: String, enum: serviceTypeEnum, required: [true, "serviceType is required"] },
   preparedBy: { type: { fullName: String, id: String, _id: false }, default: null },
+  type: { type: String, required: [true, "type is required"] },
 };
 
 const OrderItemsType = {
