@@ -4,7 +4,6 @@ import { check, validationResult } from "express-validator";
 import { isValidObjectId } from "mongoose";
 import UserModel from "../../modules/user/userModel";
 import { JWT_SECRET } from "../config/config";
-import { ADMIN_ROLE } from "../constants/roles";
 import { BAD_REQUEST_STATUS, INTERNAL_SERVER_ERROR_STATUS } from "../constants/statusHTTP";
 
 export const validateObjectId = (paramName: string) => {
@@ -36,6 +35,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
+    console.log(payload.userId);
 
     const user = await UserModel.findById(payload.userId).exec();
 
@@ -46,6 +46,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
     user.id = user._id;
     delete user._id;
     req.body.user = user;
+    req.body.tokenRole = payload.role;
 
     next();
   } catch (error) {
@@ -56,20 +57,17 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
 
 export const validateRole = (roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { user } = req.body;
+    const { user, tokenRole } = req.body;
 
     if (!user) {
       return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "we have an error, please try again" });
     }
 
-    if (!roles.includes(user.role)) {
+    if (!roles.includes(tokenRole)) {
       return res.status(BAD_REQUEST_STATUS).json({ message: "unauthorized - invalid role" });
     }
 
-    /*     if (user.role !== ADMIN_ROLE) {
-      return res.status(BAD_REQUEST_STATUS).json({ message: "unauthorized - invalid role" });
-    }
- */
+    delete req.body.tokenRole;
     next();
   };
 };

@@ -87,29 +87,33 @@ export const validateEmailWithDataBase = async (req: Request, res: Response, nex
     return res.status(BAD_REQUEST_STATUS).json({ message: "The email is different from data base email" });
   }
 
-  compareEmailWithDB(email, res);
+  const existEmail = await compareEmailWithDB(email, res);
+  if (existEmail) return res.status(BAD_REQUEST_STATUS).json({ message: "New email already exists in the database" });
 
   next();
 };
 
 export const validateNewEmail = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, newEmail } = req.body;
+  const { email, newEmail, user } = req.body;
+  console.log({ user });
+
+  if (user.email !== email) return res.status(BAD_REQUEST_STATUS).json({ message: "The email is different from data base email" });
 
   if (email === newEmail) {
     return res.status(BAD_REQUEST_STATUS).json({ message: "The new email must be different from the old email" });
   }
 
-  compareEmailWithDB(newEmail, res, "New email already exists in the database");
+  const existEmail = await compareEmailWithDB(newEmail, res);
+
+  if (existEmail) return res.status(BAD_REQUEST_STATUS).json({ message: "New email already exists in the database" });
 
   next();
 };
 
-const compareEmailWithDB = async (email: string, res: Response, errorMessage: string = "Email does not exist in the database") => {
+const compareEmailWithDB = async (email: string, res: Response) => {
   const user = await UserModel.findOne({ email }).exec();
 
-  if (!user) {
-    return res.status(BAD_REQUEST_STATUS).json({ errors: errorMessage });
-  }
+  return user;
 };
 
 //=================================

@@ -3,7 +3,15 @@ import { userService } from "./userService";
 import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
 
 export class UserController {
-  constructor() {}
+  private page: number;
+  private size: number;
+
+  constructor() {
+    this.page = 1;
+    this.size = 10;
+
+    this.getAllUsers = this.getAllUsers.bind(this);
+  }
 
   async createUser(req: Request, res: Response) {
     const result = await userService.createUser(req.body);
@@ -12,14 +20,16 @@ export class UserController {
 
   async getAllUsers(req: Request, res: Response) {
     const { page, size } = req.query;
+    const currentPage = !page ? this.page : Number(page);
+    const currentSize = !size ? this.size : Number(size);
 
     try {
       const [result, total] = await Promise.all([
-        userService.getAllUsers({ page: Number(page), size: Number(size) }),
+        userService.getAllUsers({ page: currentPage, size: currentSize }),
         userService.getTotalUsers(),
       ]);
 
-      res.status(OK_STATUS).json({ message: "users found", result, total, page, size });
+      res.status(OK_STATUS).json({ message: "users found", result, total, page: currentPage, size: currentSize });
     } catch (error) {
       console.error(error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error while getting users" });
@@ -33,7 +43,7 @@ export class UserController {
   }
 
   async updateUser(req: Request, res: Response) {
-    const { _id, __v, email, password, deleted, ...rest } = req.body;
+    const { _id, __v, email, password, deleted, role, tokenRole, ...rest } = req.body;
     const { id } = req.body.user;
 
     try {

@@ -1,5 +1,5 @@
 import express from "express";
-import { ADMIN_ROLE } from "../../shared/constants/roles";
+import { ADMIN_ROLE, CHEF_ROLE, WAITER_ROLE } from "../../shared/constants/roles";
 import { validateFields, validateObjectId, validateRole, validateToken } from "../../shared/middlewares/general";
 import { UserController } from "./userController";
 import {
@@ -23,7 +23,14 @@ const { createUser, getAllUsers, getOneUser, updateUser, changeUserPassword, cha
 router.post("/create", validateUserBody, validateFields, validateEmailWithDataBase, hashPassword, createUser);
 router.get("/getUsers", validateToken, validateRole([ADMIN_ROLE]), getAllUsers);
 router.get("/getUser/:id", validateObjectId("id"), validateToken, validateRole([ADMIN_ROLE]), validateExistUserFromIdParams, getOneUser);
-router.put("/updateUser", validateToken, validateDataToUpdate, validateFields, updateUser);
+router.put(
+  "/updateUser",
+  validateToken,
+  validateRole([ADMIN_ROLE, CHEF_ROLE, WAITER_ROLE]),
+  validateDataToUpdate,
+  validateFields,
+  updateUser
+);
 router.post(
   "/removeUser/:id",
   validateObjectId("id"),
@@ -33,6 +40,6 @@ router.post(
   removeUser
 );
 router.post("/changePassword", validateToken, validatePasswordData, validateFields, validateIsDiferentPassword, changeUserPassword);
-router.post("/changeEmail", validateToken, validateEmailData, validateFields, validateEmailWithDataBase, validateNewEmail, changeUserEmail);
+router.post("/changeEmail", validateToken, validateEmailData, validateFields, validateNewEmail, changeUserEmail);
 
 export default router;
