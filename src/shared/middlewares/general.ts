@@ -35,7 +35,6 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    console.log(payload.userId);
 
     const user = await UserModel.findById(payload.userId).exec();
 

@@ -189,7 +189,6 @@ const adaptOrderItemsToUniqueArray = (orderItems: OrderItemsType) => {
 
     return [...acc, ...currentItem];
   }, []);
-  // console.log("result", result);
 
   return result;
 };
