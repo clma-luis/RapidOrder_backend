@@ -95,7 +95,6 @@ export const validateEmailWithDataBase = async (req: Request, res: Response, nex
 
 export const validateNewEmail = async (req: Request, res: Response, next: NextFunction) => {
   const { email, newEmail, user } = req.body;
-  console.log({ user });
 
   if (user.email !== email) return res.status(BAD_REQUEST_STATUS).json({ message: "The email is different from data base email" });
 
