@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY package.json .
 RUN npm install --quiet
 
-RUN npm install -g typescript
+#RUN npm install -g typescript
 
 COPY . .
 
