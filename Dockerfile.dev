@@ -1,0 +1,17 @@
+FROM node:20-alpine
+
+RUN npm i -g nodemon
+WORKDIR /home/app
+
+COPY package*.json ./
+
+COPY package.json .
+RUN npm install --quiet
+RUN npm rebuild bcrypt 
+
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["npm", "run", "dev"]

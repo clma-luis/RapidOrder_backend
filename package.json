@@ -6,8 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node dist/app.js",
-    "dev": "nodemon --exec ts-node src/app.ts",
+    "dev": "sleep 5 && nodemon --exec ts-node src/app.ts",
     "build": "tsc"
+  },
+  "nodemonConfig": {
+    "legacyWatch": true
   },
   "keywords": [],
   "author": "",
@@ -27,7 +30,6 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
-    "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

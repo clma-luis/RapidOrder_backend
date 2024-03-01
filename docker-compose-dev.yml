@@ -1,24 +1,31 @@
 version: "3.9"
 services:
-  chanchito:
-    build:
+  rapidorders:
+    build: 
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - "3000:3000"
-    links:
-      - monguito
+      - "8080:8080"
+    networks:
+      - backend
     volumes:
       - .:/home/app
-  monguito:
+      - /home/app/node_modules
+    depends_on:
+      - mongodev
+    environment:
+      - NODE_ENV=development
+  mongodev:
     image: mongo
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=nico
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_ROOT_USERNAME=rapidorders
+      - MONGO_INITDB_ROOT_PASSWORD=rapid_orders_backend
     volumes:
       - mongo-data:/data/db
-
+networks:
+  backend:
+    driver: bridge
 volumes:
   mongo-data:
