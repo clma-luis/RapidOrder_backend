@@ -6,11 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node dist/app.js",
-    "dev": "sleep 5 && nodemon --exec ts-node src/app.ts",
+    "dev": "nodemon -L --exec ts-node src/app.ts",
     "build": "tsc"
-  },
-  "nodemonConfig": {
-    "legacyWatch": true
   },
   "keywords": [],
   "author": "",
