@@ -64,9 +64,6 @@ export class Server {
   }
 
   private routes() {
-    this.app.get("/test", function (req, res) {
-      res.send("hello world as new");
-    });
     this.app.use("/api/auth", authRoutes);
     this.app.use("/api/user", userRoutes);
     this.app.use("/api/role", roleRoutes);
