@@ -7,7 +7,9 @@ COPY package*.json ./
 
 COPY package.json .
 RUN npm install --quiet
-RUN npm rebuild bcrypt 
+RUN npm rebuild bcrypt
+RUN apk --no-cache add git
+
 
 
 COPY . .
