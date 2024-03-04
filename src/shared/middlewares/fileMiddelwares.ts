@@ -12,13 +12,13 @@ export const validateExistFile = (req: Request, fieldName: string) => {
 };
 
 export const validateFileExtension = (req: Request, nameField: string, validExtensions: string[]) => {
-  const nameImage = req.files[nameField];
+  const nameImage = req.files![nameField];
 
   if (!nameImage) {
     throw new Error(`Field <${nameField}> not found`);
   }
-
-  const nameSplited = nameImage.name.split(".");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const nameSplited = (nameImage as any).name.split(".");
   const currentExtension = nameSplited[nameSplited.length - 1];
 
   if (!validExtensions.includes(currentExtension)) {
@@ -36,7 +36,8 @@ export const uploadImageInCloudinary = async (req: Request, res: Response, next:
   }
 
   try {
-    const { tempFilePath } = req.files[fieldName];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { tempFilePath } = req.files[fieldName] as any;
 
     const image = await cloudinary.v2.uploader.upload(tempFilePath);
 
@@ -55,7 +56,8 @@ export const replaceImageInCloudinary = async (req: Request, res: Response, next
   }
 
   try {
-    const { tempFilePath } = req.files[fieldName];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { tempFilePath } = req.files[fieldName] as any;
     const imageId = hadleGetImageId(menu.image);
 
     const image = await cloudinary.v2.uploader.upload(tempFilePath, { public_id: imageId });

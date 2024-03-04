@@ -79,7 +79,7 @@ export class Server {
   public listen() {
     this.httpServer.listen(this.port, () => {
       // eslint-disable-next-line no-console
-      console.log(`Server is running at http://localhost:${this.port} buena`);
+      console.log(`Server is running at http://localhost:${this.port}`);
     });
   }
 }
