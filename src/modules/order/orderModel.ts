@@ -108,8 +108,8 @@ const OrderSchema = new Schema<OrderSchema>(
 );
 
 OrderSchema.methods.toJSON = function () {
-  const { __v, _id, orderItems, ...order } = this.toObject();
-  __v;
+  const { _id, orderItems, ...order } = this.toObject();
+  delete order.__v;
   order.id = _id.toString();
   order.orderItems = handleIdAdapter(orderItems);
 
