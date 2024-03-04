@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 import { NextFunction, Request, Response } from "express";
 import { body } from "express-validator";
 import UserModel, { UserSchema } from "../user/userModel";
@@ -17,7 +17,7 @@ export const validateLoginUser = async (req: Request, res: Response, next: NextF
 
   if (!user) {
     return res.status(BAD_REQUEST_STATUS).json({ message: "The email does not exist" });
-  } else if (!!user?.deleted) {
+  } else if (user?.deleted) {
     return res.status(BAD_REQUEST_STATUS).json({ message: "user deleted" });
   } else if (!passwordMatch) {
     return res.status(BAD_REQUEST_STATUS).json({ message: "The password is incorrect" });

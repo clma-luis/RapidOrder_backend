@@ -37,13 +37,13 @@ export const validateOrderItems = (value: OrderItemsType, req?: Request) => {
   for (let i = 0; i < ordersItemsAdapter.length; i++) {
     const item = ordersItemsAdapter[i];
 
-    if (!item.hasOwnProperty("details") || !item.hasOwnProperty("quantity") || !item.hasOwnProperty("serviceType")) {
+    if (!("details" in item) || !("quantity" in item) || !("serviceType" in item)) {
       error = "details, quantity and serviceType are required in orderItems.";
       break;
     }
   }
 
-  if (!!error) throw new Error(error);
+  if (error) throw new Error(error);
 
   return true;
 };
@@ -70,8 +70,10 @@ export const validateOrderItemToUpdate = async (req: Request, res: Response, nex
 
   if (!isValidObjectId(orderItem.id)) return res.status(BAD_REQUEST_STATUS).json({ message: "Invalid id from orderItem" });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ordersItemsAdapter = adaptOrderItemsToUniqueArray((order.orderItems as any).toObject());
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const itemFounded = ordersItemsAdapter.find((item: any) => item._id.toString() === orderItem.id) as orderItemType;
 
   if (!itemFounded) {
@@ -104,6 +106,7 @@ const validateOrderItemFieldsToUpdate = (res: Response, item: orderItemType, dat
 //========================================================
 
 export type UpdateItemsType = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any;
 };
 
@@ -117,6 +120,7 @@ export const prepareDataToUpdate = (req: Request, res: Response, next: NextFunct
   const orders: Record<string, orderItemType[]> = orderItems;
 
   const updateItems = (category: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return orders[category].map((item: any, index: any) => ({
       [`orderItems.${category}.${index}.status`]: item.status,
       [`orderItems.${category}.${index}.preparedBy`]: item.preparedBy,
@@ -185,7 +189,7 @@ const adaptOrderItemsToUniqueArray = (orderItems: OrderItemsType) => {
   const keyOfObject = Object.keys(orderItems);
 
   const result = keyOfObject.reduce((acc: orderItemType[], el) => {
-    const currentItem = !!currentOrderItems[el].length ? currentOrderItems[el] : [];
+    const currentItem = currentOrderItems[el].length ? currentOrderItems[el] : [];
 
     return [...acc, ...currentItem];
   }, []);

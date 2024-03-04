@@ -1,9 +1,9 @@
 import cloudinary from "cloudinary";
 import cors from "cors";
 import express from "express";
-import { createServer } from "http";
+import { createServer, Server as HttpServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
-const fileUpload = require("express-fileupload");
+import fileUpload from "express-fileupload";
 
 import { dbConnection } from "./database/config";
 import { BASE_URL_PORT, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from "./shared/config/config";
@@ -20,7 +20,7 @@ import { socketConnection } from "./sockets";
 export class Server {
   private app: express.Application;
   private port: string;
-  private httpServer: any;
+  private httpServer: HttpServer;
   io: SocketIOServer;
 
   constructor() {
@@ -78,7 +78,8 @@ export class Server {
 
   public listen() {
     this.httpServer.listen(this.port, () => {
-      console.log(`Server is running at http://localhost:${this.port}`);
+      // eslint-disable-next-line no-console
+      console.log(`Server is running at http://localhost:${this.port} buena`);
     });
   }
 }
