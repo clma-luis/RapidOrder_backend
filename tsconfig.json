@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
+    
     "target": "ES2020",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": ["node", "express", "./custom.d.ts"]
+    "types": ["node", "express", "./custom.d.ts", "jest"]
   },
   "include": ["src/**/*.ts", "custom.d.ts"],
   "exclude": ["node_modules"]
