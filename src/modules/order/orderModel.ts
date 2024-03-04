@@ -68,7 +68,7 @@ const orderItemCommonProps = {
   status: { type: String, default: "pendiente" },
   serviceType: { type: String, enum: serviceTypeEnum, required: [true, "serviceType is required"] },
   preparedBy: { type: { fullName: String, id: String, _id: false }, default: null },
-  type: { type: String, required: [true, "type is required"] },
+  type: { type: String },
 };
 
 const OrderItemsType = {
