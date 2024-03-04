@@ -109,6 +109,7 @@ const OrderSchema = new Schema<OrderSchema>(
 
 OrderSchema.methods.toJSON = function () {
   const { __v, _id, orderItems, ...order } = this.toObject();
+  __v;
   order.id = _id.toString();
   order.orderItems = handleIdAdapter(orderItems);
 
@@ -120,18 +121,21 @@ const OrderModel = mongoose.model<OrderSchema>("order", OrderSchema);
 export default OrderModel;
 
 interface CurrentOrderItems extends orderItemType {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _id: any;
   id?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleIdAdapter = (orderItems: any) => {
   const currentOrderItems: Record<string, CurrentOrderItems[]> = orderItems;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const keyOfObject = Object.keys(orderItems as any);
 
   const result = keyOfObject.reduce(
     (acc, el) => ({
       ...acc,
-      [el]: !!currentOrderItems[el].length
+      [el]: currentOrderItems[el].length
         ? currentOrderItems[el].map((item) => {
             const { _id, ...order } = item;
             order.id = _id.toString();
