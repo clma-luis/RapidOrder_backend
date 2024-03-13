@@ -1,7 +1,7 @@
 export const menuSeedData = [
   {
     name: "Ceviche",
-    image: "ceviche.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/eyovvt44rckr7vff8dqo.jpg",
     description: "Plato emblemático a base de pescado crudo marinado en limón y especias.",
     price: 15.99,
     ingredients: ["Pescado fresco", "Limón", "Cebolla", "Cilantro", "Ají"],
@@ -11,7 +11,7 @@ export const menuSeedData = [
   },
   {
     name: "Lomo Saltado",
-    image: "lomo_saltado.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/ms3wrno1bmcxq9ozzhjy.jpg",
     description: "Salteado de carne de res con vegetales, cebolla y tomate, acompañado de papas fritas.",
     price: 18.99,
     ingredients: ["Carne de res", "Cebolla", "Tomate", "Papas", "Sillao"],
@@ -22,7 +22,7 @@ export const menuSeedData = [
 
   {
     name: "Aji de Gallina",
-    image: "aji_de_gallina.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357984/jpxzzmr7acpiagwtmmrp.jpg",
     description: "Estofado de pollo deshilachado en una salsa cremosa de ají amarillo.",
     price: 14.99,
     ingredients: ["Pollo", "Ají amarillo", "Leche", "Nueces", "Queso"],
@@ -32,7 +32,7 @@ export const menuSeedData = [
   },
   {
     name: "Anticuchos",
-    image: "anticuchos.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357985/mtvji7izntesthdzxfdw.jpg",
     description: "Brochetas de corazón de res marinadas y asadas a la parrilla.",
     price: 12.99,
     ingredients: ["Corazón de res", "Ajo", "Comino", "Ají panca", "Vinagre"],
@@ -42,7 +42,7 @@ export const menuSeedData = [
   },
   {
     name: "Causa Rellena",
-    image: "causa_rellena.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357982/zlclhkkg9asa6gziolq6.jpg",
     description: "Capas de papa amarilla y relleno de pollo, atún o mariscos, aliñado con mayonesa y ají amarillo.",
     price: 16.99,
     ingredients: ["Papa amarilla", "Pollo", "Atún", "Mariscos", "Mayonesa"],
@@ -52,7 +52,7 @@ export const menuSeedData = [
   },
   {
     name: "Rocoto Relleno",
-    image: "rocoto_relleno.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357984/o66f39pngph0wrlosqly.jpg",
     description: "Rocotos rellenos de carne molida, huevo duro y queso, horneados y gratinados.",
     price: 19.99,
     ingredients: ["Rocotos", "Carne molida", "Huevo duro", "Queso", "Leche"],
@@ -62,7 +62,7 @@ export const menuSeedData = [
   },
   {
     name: "Cau Cau",
-    image: "caucau.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/evuexq23fgcnnl0lf0zk.jpg",
     description: "Estofado a base de mondongo (callos) cocido con papa y aliñado con ají amarillo.",
     price: 14.99,
     ingredients: ["Mondongo", "Papa", "Ají amarillo", "Cúrcuma", "Ajo"],
@@ -72,7 +72,7 @@ export const menuSeedData = [
   },
   {
     name: "Tacu Tacu",
-    image: "tacu_tacu.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357984/zs5yfxwzuvs2dgwirynt.jpg",
     description: "Arroz con frijoles frito y condimentado, acompañado de lomo saltado, mariscos o pollo.",
     price: 17.99,
     ingredients: ["Arroz", "Frijoles", "Lomo saltado", "Mariscos", "Pollo"],
@@ -82,7 +82,7 @@ export const menuSeedData = [
   },
   {
     name: "Chaufa",
-    image: "chaufa.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710358901/l424t9mdjr6msjagst6u.jpg",
     description: "Arroz frito estilo chino con trozos de pollo, carne de res o mariscos.",
     price: 15.99,
     ingredients: ["Arroz", "Pollo", "Carne de res", "Mariscos", "Huevo"],
@@ -92,7 +92,7 @@ export const menuSeedData = [
   },
   {
     name: "Arroz con Pollo",
-    image: "arroz_con_pollo.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357985/aft4jmzcaumqbeyx2glw.jpg",
     description: "Arroz cocido con trozos de pollo, cilantro, ají amarillo y cerveza.",
     price: 13.99,
     ingredients: ["Arroz", "Pollo", "Cilantro", "Ají amarillo", "Cerveza"],
@@ -101,18 +101,8 @@ export const menuSeedData = [
     type: "principal",
   },
   {
-    name: "Huancaina",
-    image: "huancaina.jpg",
-    description: "Papa sancochada acompañada de una salsa de ají amarillo y queso.",
-    price: 11.99,
-    ingredients: ["Papa", "Ají amarillo", "Queso fresco", "Leche", "Galletas"],
-    available: 1,
-    deleted: 0,
-    type: "principal",
-  },
-  {
     name: "Papa a la Huancaína",
-    image: "papa_huancaina.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/zrljdyyopm9vjdic1ndo.jpg",
     description: "Papas sancochadas bañadas en salsa de ají amarillo y queso fresco.",
     price: 10.99,
     ingredients: ["Papa", "Ají amarillo", "Queso fresco", "Leche", "Galletas"],
@@ -122,7 +112,7 @@ export const menuSeedData = [
   },
   {
     name: "Olluquito con Charqui",
-    image: "olluquito_charqui.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710358839/wjwfykqrtofs3rqnp3wg.jpg",
     description: "Estofado de olluco con carne de res seca y aliñado con ají panca.",
     price: 18.99,
     ingredients: ["Olluco", "Carne de res seca", "Ají panca", "Cebolla", "Tomate"],
@@ -132,7 +122,7 @@ export const menuSeedData = [
   },
   {
     name: "Seco de Cordero",
-    image: "seco_cordero.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357984/n66rv2lpoxqpjnyuwrji.jpg",
     description: "Estofado de cordero con frejoles, aderezado con cerveza y culantro.",
     price: 20.99,
     ingredients: ["Cordero", "Frejoles", "Cerveza", "Culantro", "Ajo"],
@@ -141,28 +131,8 @@ export const menuSeedData = [
     type: "principal",
   },
   {
-    name: "Rocoto Relleno",
-    image: "rocoto_relleno.jpg",
-    description: "Rocotos rellenos de carne molida, huevo duro y queso, horneados y gratinados.",
-    price: 19.99,
-    ingredients: ["Rocotos", "Carne molida", "Huevo duro", "Queso", "Leche"],
-    available: 1,
-    deleted: 0,
-    type: "principal",
-  },
-  {
-    name: "Aji de Gallina",
-    image: "aji_de_gallina.jpg",
-    description: "Estofado de pollo deshilachado en una salsa cremosa de ají amarillo.",
-    price: 14.99,
-    ingredients: ["Pollo", "Ají amarillo", "Leche", "Nueces", "Queso"],
-    available: 1,
-    deleted: 0,
-    type: "principal",
-  },
-  {
     name: "Ceviche de Mero",
-    image: "ceviche_mero.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/xzfwagtclhy6g385uncd.jpg",
     description: "Ceviche elaborado con mero, limón, cebolla, cilantro y ají.",
     price: 16.99,
     ingredients: ["Mero", "Limón", "Cebolla", "Cilantro", "Ají"],
@@ -172,7 +142,7 @@ export const menuSeedData = [
   },
   {
     name: "Parihuela",
-    image: "parihuela.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357984/m4yfd9z6bsjhwlz3ndl6.jpg",
     description: "Sopa de pescado y mariscos con verduras y aliño de ají panca.",
     price: 22.99,
     ingredients: ["Pescado", "Mariscos", "Verduras", "Ají panca", "Cilantro"],
@@ -182,7 +152,7 @@ export const menuSeedData = [
   },
   {
     name: "Chupe de Camarones",
-    image: "chupe_camarones.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/pycr3jq3dv4krxprafsd.jpg",
     description: "Sopa espesa de camarones con papa, maíz, huevos y leche.",
     price: 19.99,
     ingredients: ["Camarones", "Papa", "Maíz", "Huevos", "Leche"],
@@ -192,7 +162,7 @@ export const menuSeedData = [
   },
   {
     name: "Mazamorra Morada",
-    image: "mazamorra_morada.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/kg9fjc34unsibe95jlsp.jpg",
     description: "Postre a base de maíz morado, frutas y camote, acompañado de arroz con leche.",
     price: 8.99,
     ingredients: ["Maíz morado", "Frutas", "Camote", "Arroz con leche", "Canela"],
@@ -202,7 +172,7 @@ export const menuSeedData = [
   },
   {
     name: "Suspiro a la Limeña",
-    image: "suspiro_limena.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357984/pcrsxezts8eqfr5mosng.jpg",
     description: "Dulce a base de leche, yema de huevo y azúcar, decorado con merengue.",
     price: 10.99,
     ingredients: ["Leche", "Yema de huevo", "Azúcar", "Canela", "Merengue"],
@@ -212,7 +182,7 @@ export const menuSeedData = [
   },
   {
     name: "Chicha Morada",
-    image: "chicha_morada.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/zgxfdescjqsjscrguojf.jpg",
     description: "Bebida morada hecha a base de maíz morado, frutas y especias.",
     price: 6.99,
     ingredients: ["Maíz morado", "Frutas", "Canela", "Clavo de olor", "Azúcar"],
@@ -222,7 +192,7 @@ export const menuSeedData = [
   },
   {
     name: "Pisco Sour",
-    image: "pisco_sour.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357984/ebjwvzvjygkhmfl9iq1c.jpg",
     description: "Cóctel emblemático peruano hecho con pisco, limón, jarabe de goma y clara de huevo.",
     price: 9.99,
     ingredients: ["Pisco", "Limón", "Jarabe de goma", "Clara de huevo", "Hielo"],
@@ -232,7 +202,7 @@ export const menuSeedData = [
   },
   {
     name: "Inca Kola",
-    image: "inca_kola.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/upcewr2uiiulla2i7hf4.jpg",
     description: "Refresco peruano de color amarillo brillante con sabor a hierbas y frutas.",
     price: 3.99,
     ingredients: ["Hierbas", "Frutas", "Azúcar", "Ácido cítrico", "Burbujas"],
@@ -242,7 +212,7 @@ export const menuSeedData = [
   },
   {
     name: "Mate de Coca",
-    image: "mate_coca.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357983/deabri11xa5nzfanmgso.jpg",
     description: "Infusión caliente hecha con hojas de coca, tradicional en la región andina.",
     price: 5.99,
     ingredients: ["Hojas de coca", "Agua caliente", "Otras hierbas opcionales"],
@@ -252,7 +222,7 @@ export const menuSeedData = [
   },
   {
     name: "Jugo de Maracuyá",
-    image: "jugo_maracuya.jpg",
+    image: "https://res.cloudinary.com/dqdfif7bs/image/upload/v1710357982/eem67w7ph00j99vdybzh.jpg",
     description: "Refrescante jugo de maracuyá, conocido por su sabor tropical.",
     price: 4.99,
     ingredients: ["Maracuyá", "Agua", "Azúcar", "Hielo"],
