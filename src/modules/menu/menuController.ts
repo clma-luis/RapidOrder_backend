@@ -1,3 +1,4 @@
+/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 import { Request, Response } from "express";
 import { MenuItemSchema } from "./menuModel";
 import { MenuService } from "./menuService";
@@ -5,12 +6,17 @@ import { CREATED_STATUS, INTERNAL_SERVER_ERROR_STATUS, NOT_FOUND, OK_STATUS } fr
 
 export class MenuController {
   private menuService: MenuService;
+  private page: number;
+  private size: number;
+
   constructor(menuService: MenuService) {
+    this.page = 1;
+    this.size = 10;
     this.menuService = menuService;
   }
 
   public createMenuItem = async (req: Request, res: Response) => {
-    const { cloudUrl, image, ...rest } = req.body;
+    const { cloudUrl, ...rest } = req.body;
     const data = {
       ...rest,
       image: cloudUrl,
@@ -27,7 +33,11 @@ export class MenuController {
   };
 
   public getAllMenuItems = async (req: Request, res: Response) => {
-    const result = await this.menuService.getAllMenuItems();
+    const { page, size, type } = req.query;
+    const currentPage = !page ? this.page : Number(page);
+    const currentSize = !size ? this.size : Number(size);
+
+    const result = await this.menuService.getAllMenuItems({ page: currentPage, size: currentSize, type: type as string });
     res.status(OK_STATUS).json({ message: "MenuItems founds", result });
   };
 
@@ -47,6 +57,7 @@ export class MenuController {
 
   public updateMenuItem = async (req: Request, res: Response) => {
     const { id } = req.params;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { available, deleted, menu, cloudUrl, image, ...rest } = req.body;
     const data = {
       ...rest,

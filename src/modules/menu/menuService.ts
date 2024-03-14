@@ -7,8 +7,9 @@ export class MenuService {
     return result;
   }
 
-  public async getAllMenuItems(): Promise<MenuItemSchema[]> {
-    return MenuModel.find().exec();
+  public async getAllMenuItems({ page, size, type }: { page: number; size: number; type: string }): Promise<MenuItemSchema[]> {
+    const skip = (page - 1) * size;
+    return MenuModel.find({ type }).skip(skip).limit(size);
   }
 
   public async getOneMenuItem(id: string): Promise<MenuItemSchema> {
