@@ -9,23 +9,12 @@ on:
 jobs:
   build:
     runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node-version: [20.x]
     steps:
+    - name: Checkout source
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
     - run: npm test
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
     - name: Build and push Docker image
       run: |
         docker build -t rapidordersbackend .
