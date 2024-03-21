@@ -3,8 +3,6 @@ name: Node.js CI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
 
 jobs:
   build:
@@ -12,15 +10,13 @@ jobs:
     steps:
     - name: Checkout source
     - uses: actions/checkout@v3
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-    - run: npm test
-    - name: Build and push Docker image
-      run: |
-        docker build -t rapidordersbackend .
+    - name: Login to docker hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build docker hub image
+      run: docker build -t rapidordersbackend .
         docker tag rapidordersbackend:latest ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+    - name: Publish image to docker hub
+      run: docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
 
   deploy:
     needs: build
