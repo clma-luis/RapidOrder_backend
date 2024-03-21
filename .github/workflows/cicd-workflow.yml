@@ -11,13 +11,10 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x, 20.x]
-
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -28,7 +25,6 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-
     steps:
     - name: Set up Node.js
     - uses: actions/setup-node@v3
@@ -40,7 +36,6 @@ jobs:
         docker tag rapidordersbackend:latest ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-  
   deploy:
     needs: build
     runs-on: [aws-ec2]
