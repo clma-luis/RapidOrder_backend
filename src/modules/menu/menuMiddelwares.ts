@@ -51,7 +51,6 @@ export const validateExistMenu = async (req: Request, res: Response, next: NextF
 
     next();
   } catch (error) {
-    console.error(error);
     return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "Internal server error to find menu" });
   }
 };

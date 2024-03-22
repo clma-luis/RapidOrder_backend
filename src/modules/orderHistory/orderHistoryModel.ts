@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export type HistoryType = {
   action: string;
   userDetails: { id: string; fullName: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataDetails: any;
   message?: string;
   date: Date;
@@ -28,6 +29,7 @@ const OrderHistorySchema = new Schema<OrderHistorySchema>({
 });
 
 OrderHistorySchema.methods.toJSON = function () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { __v, _id, ...orderHistory } = this.toObject();
   orderHistory.id = _id;
   return orderHistory;

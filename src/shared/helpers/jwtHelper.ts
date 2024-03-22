@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const jwt = require("jsonwebtoken");
 import { JWT_SECRET } from "../config/config";
 

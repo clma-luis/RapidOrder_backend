@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const jwt = require("jsonwebtoken");
 import { NextFunction, Request, Response } from "express";
 import { check, validationResult } from "express-validator";
@@ -17,6 +18,7 @@ export const validateFields = (req: Request, res: Response, next: NextFunction) 
 
   if (!errors.isEmpty()) {
     const errorsFields = Object.keys(errors.mapped());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const objectErrors: Record<string, any> = errors.mapped();
     const result = errorsFields.map((item) => ({ message: objectErrors[item].msg, field: item }));
 
@@ -49,7 +51,6 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
 
     next();
   } catch (error) {
-    console.error(error);
     return res.status(BAD_REQUEST_STATUS).json({ message: "Invalid Token", error });
   }
 };

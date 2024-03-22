@@ -6,7 +6,7 @@ import { CREATED_STATUS, OK_STATUS } from "../../shared/constants/statusHTTP";
 class RoleController {
   constructor() {}
 
-  public createRole = async (req: Request, res: Response): Promise<any> => {
+  public createRole = async (req: Request, res: Response) => {
     const data = req.body as RoleSchema;
     const result = await roleService.addRole(data);
     res.status(CREATED_STATUS).json({ message: "Role created successfully", result });

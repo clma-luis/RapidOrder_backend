@@ -1,8 +1,8 @@
-import { ClosedByType, OrderItemsType, OrderSchema, StatusOrderType, orderItemType } from "../order/orderModel";
+import { ClosedByType, OrderItemsType, OrderProps, OrderSchema, StatusOrderType, orderItemType } from "../order/orderModel";
 
 import { HistoryType, OrderHistorySchema } from "./orderHistoryModel";
 
-export const handleAdaptDataToCreateOrderHistory = (data: OrderSchema, dataDetails: any) => {
+export const handleAdaptDataToCreateOrderHistory = (data: OrderSchema, dataDetails: OrderProps) => {
   if (!data || !dataDetails) throw new Error("Data to create order history is required");
   const { id, createdAt, createdBy, creatorFullName } = data;
 
@@ -40,12 +40,11 @@ export const handleAdapDataToAddNewStatusHistory = (data: OrderSchema, orderItem
 export const orderItemsAdapter = (orderItems: OrderItemsType) => {
   const currentOrderItems: Record<string, orderItemType[]> = orderItems;
   const keyOfObject = Object.keys(orderItems);
-
   const result = keyOfObject.reduce(
     (acc, el) => ({
       ...acc,
-      [el]: currentOrderItems[el].map((item) => {
-        const { preparedBy, ...rest } = item;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      [el]: currentOrderItems[el].map(({ preparedBy, ...rest }) => {
         return { ...rest };
       }),
     }),

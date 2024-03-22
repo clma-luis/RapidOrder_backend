@@ -1,6 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require("bcrypt");
 import { NextFunction, Request, Response } from "express";
-import { body, check } from "express-validator";
+import { body } from "express-validator";
 
 import { LETTER_PATTERN, NUMBER_PATTERN, SPECIAL_CHARACTERS_PATTERN } from "../../shared/constants/regex";
 import RoleModel from "../role/roleModel";
@@ -65,7 +66,6 @@ export const hashPassword = async (req: Request, res: Response, next: NextFuncti
 
     next();
   } catch (error) {
-    console.error(error);
     res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "Internal server error: password not hashed" });
   }
 };
@@ -87,7 +87,7 @@ export const validateEmailWithDataBase = async (req: Request, res: Response, nex
     return res.status(BAD_REQUEST_STATUS).json({ message: "The email is different from data base email" });
   }
 
-  const existEmail = await compareEmailWithDB(email, res);
+  const existEmail = await compareEmailWithDB(email);
   if (existEmail) return res.status(BAD_REQUEST_STATUS).json({ message: "New email already exists in the database" });
 
   next();
@@ -102,14 +102,14 @@ export const validateNewEmail = async (req: Request, res: Response, next: NextFu
     return res.status(BAD_REQUEST_STATUS).json({ message: "The new email must be different from the old email" });
   }
 
-  const existEmail = await compareEmailWithDB(newEmail, res);
+  const existEmail = await compareEmailWithDB(newEmail);
 
   if (existEmail) return res.status(BAD_REQUEST_STATUS).json({ message: "New email already exists in the database" });
 
   next();
 };
 
-const compareEmailWithDB = async (email: string, res: Response) => {
+const compareEmailWithDB = async (email: string) => {
   const user = await UserModel.findOne({ email }).exec();
 
   return user;

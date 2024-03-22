@@ -31,7 +31,6 @@ export class UserController {
 
       res.status(OK_STATUS).json({ message: "users found", result, total, page: currentPage, size: currentSize });
     } catch (error) {
-      console.error(error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error while getting users" });
     }
   }
@@ -43,6 +42,7 @@ export class UserController {
   }
 
   async updateUser(req: Request, res: Response) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, __v, email, password, deleted, role, tokenRole, ...rest } = req.body;
     const { id } = req.body.user;
 
@@ -50,7 +50,6 @@ export class UserController {
       const result = await userService.updateUser(id, rest);
       res.status(OK_STATUS).json({ message: "updated successfully", result });
     } catch (error) {
-      console.error(error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "An error occurred while updating the user" });
     }
   }
@@ -63,7 +62,6 @@ export class UserController {
       const result = await userService.changeUserPassword(id, newPassword);
       res.status(OK_STATUS).json({ message: "password updated successfully", result });
     } catch (error) {
-      console.error(error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: "An error occurred while updating user's password " });
     }
   }

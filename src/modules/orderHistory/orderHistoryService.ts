@@ -1,4 +1,3 @@
-import { ClosedByType } from "../order/orderModel";
 import OrderHistoryModel, { HistoryType, OrderHistorySchema } from "./orderHistoryModel";
 
 class OrderHistoryService {

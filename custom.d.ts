@@ -1,9 +1,11 @@
-import { Request } from "express";
+import { FileArray } from "express-fileupload";
 
 declare global {
   namespace Express {
     interface Request {
-      files: any;
+      files?: FileArray | null | undefined;
     }
   }
 }
+
+export {};

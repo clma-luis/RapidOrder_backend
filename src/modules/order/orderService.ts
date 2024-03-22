@@ -87,7 +87,7 @@ class OrderService {
     return result;
   }
 
-  public getOrderStatus(orderId: string): any {
+  public getOrderStatus(orderId: string) {
     return orderId;
   }
 
@@ -95,7 +95,7 @@ class OrderService {
     const result = (await OrderModel.findOneAndUpdate({ _id: id }, { table }, { new: true })) as OrderSchema;
     return result;
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async addAdditionalOrdersService(id: string, orderItems: any): Promise<OrderSchema> {
     const result = (await OrderModel.findByIdAndUpdate(
       { _id: id },

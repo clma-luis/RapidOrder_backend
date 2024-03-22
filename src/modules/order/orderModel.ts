@@ -43,6 +43,10 @@ export type OrderItemsType = {
   drinks: orderItemType[];
 };
 
+export interface OrderItemsToObjectType extends OrderItemsType {
+  toObject(): unknown;
+}
+
 export type ClosedByType = { fullName: string; userId: string };
 
 export interface OrderProps {

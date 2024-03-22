@@ -11,6 +11,7 @@ const RoleSchema = new Schema<RoleSchema>({
 });
 
 RoleSchema.methods.toJSON = function () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { __v, _id, ...role } = this.toObject();
   role.id = _id.toString();
   return role;

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require("bcrypt");
 import { Request, Response } from "express";
 import MenuModel from "../menu/menuModel";
@@ -17,7 +18,6 @@ export class SeedController {
 
       res.status(CREATED_STATUS).json({ message: "Menu seeded successfully" });
     } catch (error) {
-      console.error("Error seeding menu:", error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error" });
     }
   };
@@ -28,12 +28,11 @@ export class SeedController {
 
       res.status(CREATED_STATUS).json({ message: "Roles seeded successfully" });
     } catch (error) {
-      console.error("Error seeding roles:", error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error" });
     }
   };
 
-  public executeUserSeed = async (req: Request, res: Response): Promise<void> => {
+  public executeUserSeed = async (_: Request, res: Response) => {
     try {
       const users = await Promise.all(
         usersSeedData.map(async (user) => {
@@ -47,7 +46,6 @@ export class SeedController {
       await UserModel.insertMany(users);
       res.status(CREATED_STATUS).json({ message: "Users seeded successfully" });
     } catch (error) {
-      console.error("Error seeding users:", error);
       res.status(INTERNAL_SERVER_ERROR_STATUS).json({ error: "Internal server error" });
     }
   };

@@ -23,8 +23,10 @@ const MenuSchema = new Schema<MenuItemSchema>({
 });
 
 MenuSchema.methods.toJSON = function () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { __v, _id, ...menu } = this.toObject();
   menu.id = _id.toString();
+
   return menu;
 };
 

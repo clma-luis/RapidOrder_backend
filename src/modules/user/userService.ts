@@ -6,6 +6,7 @@ export class UserService {
     this.userNotDeleted = 0;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createUser(data: any): Promise<UserSchema> {
     const menuItem = new UserModel({ ...data });
     const result = await menuItem.save();
