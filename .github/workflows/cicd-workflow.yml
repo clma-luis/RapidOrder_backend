@@ -18,7 +18,9 @@ jobs:
     - name: Dependencies install
       run: npm install
     - name: Run tests
-      run: npm test
+      run: npm run test
+    - name: Run Lint
+      run: npm run eslint
   #  - name: Login to docker hub
   #    run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
   #  - name: Build docker hub image

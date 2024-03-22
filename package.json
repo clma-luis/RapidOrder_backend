@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "tsc && node dist/app.js",
+    "eslint": "eslint . --ext .ts",
     "dev": "nodemon -L --exec ts-node src/app.ts",
     "build": "tsc",
     "prepare": "husky || true"
