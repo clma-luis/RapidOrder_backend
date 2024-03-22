@@ -8,6 +8,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Dependencies install
+      run: npm install
+    - name: Run tests
+      run: npm test
     - name: Checkout source
       uses: actions/checkout@v3
     - name: Login to docker hub
@@ -19,13 +26,13 @@ jobs:
     - name: Publish image to docker hub
       run: docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
 
-  deploy:
-    needs: build
-    runs-on: [aws-ec2]
-    steps:
-      - name: Pull image from Docker Hub
-        run: docker pull ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-      - name: Delete old container
-        run: docker rm -f rapidordersbackend
-      - name: Run container from image
-        run: docker run -d -p 8080:8080 --name rapidordersbackend ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+  #deploy:
+  #  needs: build
+  #  runs-on: [aws-ec2]
+  #  steps:
+  #    - name: Pull image from Docker Hub
+  #      run: docker pull ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+  #    - name: Delete old container
+  #      run: docker rm -f rapidordersbackend
+  #    - name: Run container from image
+  #      run: docker run -d -p 8080:8080 --name rapidordersbackend ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
