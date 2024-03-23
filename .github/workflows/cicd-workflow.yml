@@ -33,11 +33,11 @@ jobs:
          
   deploy:
     needs: build
-    runs-on: [aws-ec2]
+    runs-on: [rapidorderbackend]
     steps:
       - name: Pull image from docker hub
         run: docker pull rapidordersbackend:latest
       - name: Delete old container
-        run: docker rm -f radpidorders
+        run: docker rm -f rapidorders
       - name: Run docker container
-        run: docker run -d -p 8080:8080 --name radpidorders rapidordersbackend:latest
+        run: docker run -d -p 8080:8080 --name rapidorders rapidordersbackend:latest
