@@ -8,40 +8,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0 
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-    - run: ls -l
-    - name: Dependencies install
-      run: npm install
-    - name: Run Lint
-      run: npm run eslint
-    - name: Run tests
-      run: npm run test
-    - name: Login to docker hub
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build docker hub image
-      run: |
-        docker build -t rapidordersbackend .
-        docker tag rapidordersbackend:latest ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-    - name: Publish image to docker hub
-      run: docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: ls -l
+      - name: Dependencies install
+        run: npm install
+      - name: Run Lint
+        run: npm run eslint
+      - name: Run tests
+        run: npm run test
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build docker hub image
+        run: |
+          docker build -t rapidordersbackend .
+          docker tag rapidordersbackend:latest ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+      - name: Publish image to docker hub
+        run: docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
 
+         
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: [aws-ec2]
     steps:
-    - name: SSH into EC2 instance and deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.MY_EC2_SSH_KEY }}
-        script: |
-          sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/dummy-server:latest
-          sudo docker stop my-node-app || true
-          sudo docker rm my-node-app || true
-          sudo docker run -d -p 8080:8080 --name my-node-app ${{ secrets.DOCKER_REPO_URL }}/dummy-server:latest
+      - name: Pull image from docker hub
+        run: docker pull rapidordersbackend:latest
+      - name: Delete old container
+        run: docker rm -f radpidorders
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 --name radpidorders rapidordersbackend:latest
