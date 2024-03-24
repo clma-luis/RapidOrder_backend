@@ -29,13 +29,14 @@ jobs:
           docker tag rapidordersbackend:latest ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
       - name: Publish image to docker hub
         run: docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-  deploy:
-    needs: build
-    runs-on: [rapidorderbackend]
-    steps:
-      - name: Pull image from docker hub
-        run: docker pull rapidordersbackend:latest
-      - name: Delete old container
-        run: docker rm -f rapidorders
-      - name: Run docker container
-        run: docker run -d -p 8080:8080 --name rapidorders rapidordersbackend:latest
+      - name: SSH into EC2 instance and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.MY_EC2_SSH_KEY }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+            sudo docker stop my-node-app || true
+            sudo docker rapidorderbackend || true
+            sudo docker run -d -p 3000:3000 --name rapidorderbackend ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
