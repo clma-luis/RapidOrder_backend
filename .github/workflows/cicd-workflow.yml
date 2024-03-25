@@ -37,9 +37,8 @@ jobs:
           key: ${{ secrets.MY_EC2_SSH_KEY }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-            sudo docker stop rapidordersbackend || true
-            sudo docker rm rapidordersbackend
-            sudo docker rapidordersbackend || true
+            sudo docker stop rapidorderbackend || true
+            sudo docker rm rapidorderbackend || true
             sudo docker run -d -p 8080:8080 \
             -e PORT=${{ secrets.PORT }} \
             -e MONGO_CONNECTION_URL=${{ secrets.MONGO_CONNECTION_URL }} \
@@ -47,5 +46,5 @@ jobs:
             -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
             -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
             -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
-            --name rapidordersbackend \
+            --name rapidorderbackend \
             ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
