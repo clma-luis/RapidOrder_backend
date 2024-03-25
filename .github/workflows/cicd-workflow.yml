@@ -29,11 +29,6 @@ jobs:
           docker tag rapidordersbackend:latest ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
       - name: Publish image to docker hub
         run: docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@master
         with:
