@@ -40,4 +40,14 @@ jobs:
             sudo docker stop rapidorderbackend || true
             sudo docker rm rapidorderbackend
             sudo docker rapidorderbackend || true
-            sudo docker run -d -p 8080:8080 --name rapidorderbackend ${{ secrets.DOCKER_USERNAME }}/rapidordersbackend
+            sudo docker run -d -p 8080:8080 \
+              sudo docker run -d -p 8080:8080 \
+            -e PORT=${{ secrets.PORT }} \
+            -e MONGO_CONNECTION_URL=${{ secrets.MONGO_CONNECTION_URL }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
+            -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
+            -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
+            --name rapidorderbackend \
+            --name rapidorderbackend \
+             ${{ secrets.DOCKER_USERNAME }}/rapidordersbackend
