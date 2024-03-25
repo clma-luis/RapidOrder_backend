@@ -36,18 +36,15 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.MY_EC2_SSH_KEY }}
           script: |
-            sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
-            sudo docker stop rapidorderbackend || true
-            sudo docker rm rapidorderbackend
-            sudo docker rapidorderbackend || true
-            sudo docker run -d -p 8080:8080 \
-              sudo docker run -d -p 8080:8080 \
-            -e PORT=${{ secrets.PORT }} \
-            -e MONGO_CONNECTION_URL=${{ secrets.MONGO_CONNECTION_URL }} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
-            -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
-            -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
-            --name rapidorderbackend \
-            --name rapidorderbackend \
-             ${{ secrets.DOCKER_USERNAME }}/rapidordersbackend
+            docker pull ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+            docker stop rapidorderbackend || true
+            docker rm rapidorderbackend || true
+            docker run -d -p 8080:8080 \
+              -e PORT=${{ secrets.PORT }} \
+              -e MONGO_CONNECTION_URL=${{ secrets.MONGO_CONNECTION_URL }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
+              -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
+              -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
+              --name rapidorderbackend \
+              ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
