@@ -40,4 +40,4 @@ jobs:
             sudo docker stop rapidorderbackend || true
             sudo docker rm rapidorderbackend
             sudo docker rapidorderbackend || true
-            sudo docker run -d -p 3000:3000 --name rapidorderbackend ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+            sudo docker run -d -p 80800:8080 --name rapidorderbackend ${{ secrets.DOCKER_USERNAME }}/rapidordersbackend
