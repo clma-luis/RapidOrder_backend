@@ -29,6 +29,10 @@ jobs:
           docker tag rapidordersbackend:latest ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
       - name: Publish image to docker hub
         run: docker push ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+  deploy:
+    needs: build
+    runs-on: [ip-172-31-40-8]
+    steps:
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@master
         with:
@@ -40,4 +44,12 @@ jobs:
             sudo docker stop rapidorderbackend || true
             sudo docker rm rapidorderbackend
             sudo docker rapidorderbackend || true
-            sudo docker run -d -p 8080:8080 --name rapidorderbackend ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
+            sudo docker run -d -p 8080:8080 \
+            -e PORT=${{ secrets.PORT }} \
+            -e MONGO_CONNECTION_URL=${{ secrets.MONGO_CONNECTION_URL }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
+            -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
+            -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
+            --name rapidorderbackend \
+            ${{ secrets.DOCKER_REPO_URL }}/rapidordersbackend:latest
